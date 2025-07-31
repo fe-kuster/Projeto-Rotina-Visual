@@ -1,0 +1,30 @@
+# Arquivos de ambiente e credenciais
+.env
+
+# Ambiente Virtual Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.pytest_cache/
+.mypy_cache/
+.vscode/ 
+.idea/ 
+
+*.log
+*.tmp
+
+# Dependências do Frontend Node.js/npm
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.env.local # Se o frontend também usar arquivos .env específicos
+
+*.iml
+.coverage
+htmlcov/
