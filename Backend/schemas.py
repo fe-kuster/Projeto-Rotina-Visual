@@ -48,7 +48,8 @@ class RotinaBase(BaseModel):
     nome: str
 
 class RotinaCreate(RotinaBase):
-    pass
+    nome: str
+    tarefas: list[int]
 
 class RotinaResponse(RotinaBase):
     id: int

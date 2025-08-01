@@ -19,6 +19,7 @@ def gerar_estrelas_do_dia(
     db: Session = Depends(get_db),
     user_id: int = Depends(get_current_user_id)
 ):
+    
     hoje = date.today()
 
     # Verifica se já existem estrelas para hoje
@@ -37,11 +38,11 @@ def gerar_estrelas_do_dia(
     if not tarefas_concluidas:
         raise HTTPException(status_code=404, detail="Nenhuma tarefa concluída encontrada para gerar estrelas.")
 
-    # Print debug para ver se o join finalmente está funcionando
-    for tr in tarefas_concluidas:
-        print(f"Tarefa ID: {tr.tarefa_id}, dificuldade: {tr.tarefa.dificuldade if tr.tarefa else 'N/A'}")
+    # Print debug para ver se o join finalmente está funcionando (substituir por logging em produção)
+    #for tr in tarefas_concluidas:
+    #    print(f"Tarefa ID: {tr.tarefa_id}, dificuldade: {tr.tarefa.dificuldade if tr.tarefa else 'N/A'}")
 
-    # Soma as estrelas de acordo com a dificuldade
+    # Soma as estrelas cfe dificuldade da tarefa, garante que a tarefa e sua dificuldade existam. 
     total_estrelas = sum(
         DIFICULDADE_ESTRELAS.get(tr.tarefa.dificuldade.value, 0)
         for tr in tarefas_concluidas if tr.tarefa and tr.tarefa.dificuldade

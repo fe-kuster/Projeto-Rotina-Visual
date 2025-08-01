@@ -10,7 +10,8 @@ router = APIRouter(prefix="/rotinas", tags=["Rotinas"])
 
 @router.post("/", response_model=RotinaResponse)
 def criar_rotina(rotina_data: dict, db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
-    nova_rotina = Rotina(nome=rotina_data["nome"], usuario_id=user_id)
+    #Cria uma nova rotina e associa as tarefas a ela.
+    ova_rotina = Rotina(nome=rotina_data["nome"], usuario_id=user_id)
     db.add(nova_rotina)
     db.commit()
     db.refresh(nova_rotina)
@@ -61,7 +62,6 @@ def obter_rotina(rotina_id: int, db: Session = Depends(get_db), user_id: int = D
     )
     tarefa_ids = [rel.tarefa_id for rel in relacoes]
 
-    # Monta o dicionário com os dados esperados pelo frontend
     return {
         "id": rotina.id,
         "nome": rotina.nome,
@@ -101,12 +101,3 @@ def atualizar_rotina(rotina_id: int, rotina_data: dict, db: Session = Depends(ge
         "data_criacao": rotina.data_criacao,
         "tarefas": tarefa_ids,
     }
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
