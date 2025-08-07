@@ -51,12 +51,18 @@ export default function SuasRotinas() {
         }
       });
 
-      if (!response.ok) throw new Error("Erro ao excluir rotina");
-
-      // Atualizar a lista após exclusão
+      if (!response.ok) {
+        // Se a resposta não for bem-sucedida, mostrar o erro
+        const errorText = await response.text();
+        throw new Error(`Erro ao excluir rotina: ${response.status} - ${errorText}`);
+      }
+      // Se a exclusão for bem-sucedida, removemos a rotina da lista local
       setRotinas(rotinas.filter((r) => r.id !== id));
+      alert("Rotina excluída com sucesso!");
+    
     } catch (err) {
-      alert("Erro ao excluir rotina.");
+      console.error(err);
+      alert(`Erro ao excluir rotina: ${err.message}`);
     }
   }
 
@@ -64,52 +70,50 @@ export default function SuasRotinas() {
   if (erro) return <p>Erro: {erro}</p>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Escolha a rotina do dia</h1>
+    <div className="pagina-suas-rotinas">
+      <div className="cartao-rotinas">
+        <h1 className="titulo-suas-rotinas">Escolha a rotina do dia:</h1>
 
-      {rotinas.length > 0 ? (
-        <ul className="space-y-4 mb-8">
-          {rotinas.map((rotina) => (
-            <li
-              key={rotina.id}
-              className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 border rounded-xl shadow bg-white"
-            >
-              <span className="font-medium text-lg mb-2 sm:mb-0">{rotina.nome}</span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => navigate(`/rotina/${rotina.id}`)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700"
-                >
-                  Ver
-                </button>
-                <button
-                  onClick={() => editarRotina(rotina.id)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-yellow-600"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => excluirRotina(rotina.id)}
-                  className="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700"
-                >
-                  Excluir
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mb-6">Você ainda não tem nenhuma rotina criada.</p>
-      )}
+        {rotinas.length > 0 ? (
+          <ul className="lista-rotinas">
+            {rotinas.map((rotina) => (
+              <li key={rotina.id} className="item-rotina">
+                <span className="nome-rotina">{rotina.nome}</span>
+                <div className="container-botoes">
+                  <button
+                    onClick={() => navigate(`/rotina/${rotina.id}`)}
+                    className="botao-acao"
+                  >
+                    Ver
+                  </button>
+                  <button
+                    onClick={() => editarRotina(rotina.id)}
+                    className="botao-acao"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => excluirRotina(rotina.id)}
+                    className="botao-acao"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mensagem-vazio">Você ainda não tem nenhuma rotina criada.</p>
+        )}
 
-      {/* Botão para criar nova rotina (sempre visível) */}
-      <div className="text-center">
-        <button
-          onClick={() => navigate("/montar-rotina")}
-          className="bg-green-600 text-white px-6 py-2 rounded-xl hover:bg-green-700"
-        >
-          Criar nova rotina
-        </button>
+        <div className="container-botao-novo">
+          <button
+            onClick={() => navigate("/montar-rotina")}
+            className="botao-novo"
+          >
+            Criar nova rotina
+          </button>
+        </div>
       </div>
     </div>
   );

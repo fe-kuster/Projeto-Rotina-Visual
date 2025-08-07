@@ -11,7 +11,6 @@ import schemas
 from utils import hash_senha, verificar_senha
 from auth import criar_token, verificar_token
 from auth import auth_router
-from fastapi import FastAPI
 from utils_errors import (
     erro_400_email_ja_cadastrado,
     erro_403_login_incorreto,
@@ -20,7 +19,7 @@ from utils_errors import (
 )
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, SessionLocal
-
+from auth import get_current_user
 
 # Inicializa app e banco
 app = FastAPI()
@@ -31,7 +30,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 Base.metadata.create_all(bind=engine)
 from tarefas_routes import router as tarefas_router
 app.include_router(tarefas_router)
-
 from rotinas_routes import router as rotinas_router
 app.include_router(rotinas_router)
 from tarefas_rotinas_routes import router as tarefas_rotina_router
@@ -127,4 +125,3 @@ def get_usuario_logado(
         "nome_responsavel": usuario.nome_responsavel,
         "email_responsavel": usuario.email_responsavel
     }
-

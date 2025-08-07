@@ -35,17 +35,11 @@ export default function EditarRotina() {
 
         const tarefasData = await tarefasResp.json();
 
-        console.log("Resposta da API - rotinaData:", rotinaData);
-        console.log("Resposta da API - tarefasData:", tarefasData);
-
         setNomeDaRotina(rotinaData.nome);
         setTarefasDisponiveis(tarefasData);
-
-        // rotinaData.tarefas é uma lista de IDs
+      
         const tarefasOrdenadas = Array.isArray(rotinaData.tarefas)
           ? rotinaData.tarefas
-            .map((id) => tarefasData.find((t) => t.id === id))
-            .filter(Boolean)
           : [];
 
         setTarefasSelecionadas(tarefasOrdenadas);
@@ -108,94 +102,96 @@ export default function EditarRotina() {
   if (erro) return <p className="p-6 text-red-600">Erro: {erro}</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Editar rotina</h1>
+    <div className="pagina-editar-rotina">
+      <div className="cartao-editar-rotina">
+        <h1 className="titulo-editar-rotina">Editar rotina</h1>
 
-      {/* Nome da rotina */}
-      <div className="mb-4">
-        <label className="block mb-1 font-medium">Nome da rotina</label>
-        <input
-          type="text"
-          value={nomeDaRotina}
-          onChange={(e) => setNomeDaRotina(e.target.value)}
-          className="w-full px-3 py-2 border rounded-xl"
-        />
-      </div>
-
-      {/* Tarefas disponíveis */}
-      <div className="mb-6">
-        <h2 className="font-semibold mb-2">Tarefas disponíveis</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {tarefasDisponiveis.map((tarefa) => (
-            <label
-              key={tarefa.id}
-              className="flex items-center p-3 border rounded-xl shadow bg-white"
-            >
-              <input
-                type="checkbox"
-                checked={tarefasSelecionadas.some((t) => t.id === tarefa.id)}
-                onChange={() => toggleTarefa(tarefa)}
-                className="mr-3"
-              />
-              {tarefa.nome} – {tarefa.estrelas} ⭐
-            </label>
-          ))}
+        {/* Nome da rotina */}
+        <div className="form-group-editar">
+          <label className="label-editar-rotina">Nome da rotina</label>
+          <input
+            type="text"
+            value={nomeDaRotina}
+            onChange={(e) => setNomeDaRotina(e.target.value)}
+            className="input-editar-rotina"
+          />
         </div>
 
-        {/* Criar nova tarefa */}
-        <div className="mt-4">
-          <button
-            onClick={() => navigate("/criar-tarefa")}
-            className="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700"
-          >
-            Criar nova tarefa
-          </button>
-        </div>
-      </div>
-
-      {/* Ordem das tarefas */}
-      <div className="mb-6">
-        <h2 className="font-semibold mb-2">Ordem da rotina</h2>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="tarefas-selecionadas" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="flex flex-wrap gap-3 min-h-[80px] border p-4 rounded-xl bg-gray-50"
+        {/* Tarefas disponíveis */}
+        <div className="form-group-editar">
+          <h2 className="subtitulo-editar-rotina">Tarefas disponíveis</h2>
+          <div className="lista-tarefas-disponiveis">
+            {tarefasDisponiveis.map((tarefa) => (
+              <label
+                key={tarefa.id}
+                className="item-tarefa-disponivel"
               >
-                {tarefasSelecionadas.map((tarefa, index) => (
-                  <Draggable
-                    key={tarefa.id}
-                    draggableId={tarefa.id.toString()}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="p-3 bg-blue-100 border rounded-xl shadow text-sm"
-                      >
-                        {tarefa.nome}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+                <input
+                  type="checkbox"
+                  checked={tarefasSelecionadas.some((t) => t.id === tarefa.id)}
+                  onChange={() => toggleTarefa(tarefa)}
+                  className="checkbox-tarefa"
+                />
+                {tarefa.nome} – {tarefa.estrelas} ⭐
+              </label>
+            ))}
+          </div>
 
-      {/* Salvar */}
-      <button
-        onClick={salvarAlteracoes}
-        className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700"
-      >
-        Salvar alterações
-      </button>
+          {/* Botão para criar nova tarefa */}
+          <div className="form-group-editar" style={{ marginTop: "1rem" }}>
+            <button
+              onClick={() => navigate("/criar-tarefa")}
+              className="botao-criar-tarefa-editar"
+            >
+              Criar nova tarefa
+            </button>
+          </div>
+        </div>
+
+        {/* Ordem das tarefas */}
+        <div className="form-group-editar">
+          <h2 className="subtitulo-editar-rotina">Ordem da rotina</h2>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="tarefas-selecionadas" direction="horizontal">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="lista-ordem-rotina"
+                >
+                  {tarefasSelecionadas.map((tarefa, index) => (
+                    <Draggable
+                      key={tarefa.id}
+                      draggableId={tarefa.id.toString()}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="item-tarefa-selecionada"
+                        >
+                          {tarefa.nome}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
+
+        {/* Botão Salvar */}
+        <button
+          onClick={salvarAlteracoes}
+          className="botao-salvar-alteracoes"
+        >
+          Salvar alterações
+        </button>
+      </div>
     </div>
   );
 }

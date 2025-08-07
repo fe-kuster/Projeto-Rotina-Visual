@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export default function LoginCadastro() {
   const [modo, setModo] = useState('login'); // 'login' ou 'cadastro'
@@ -35,9 +35,9 @@ export default function LoginCadastro() {
         });
 
         if (!response.ok) {
-  const errorText = await response.text();
-  throw new Error(`Login falhou: ${errorText}`);
-}
+          const errorText = await response.text();
+          throw new Error(`Login falhou: ${errorText}`);
+        }
 
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
@@ -76,72 +76,72 @@ export default function LoginCadastro() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">
+    <div className="pagina-login-cadastro">
+      <div className="cartao-login">
+        <h2 className="titulo-login">
           {modo === 'login' ? 'Entrar na sua conta' : 'Criar nova conta'}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="form-login">
           {modo === 'cadastro' && (
             <>
-              <div>
-                <label className="block mb-1 font-medium">Nome do usuário</label>
+              <div className="form-group">
+                <label className="label-login">Nome do usuário</label>
                 <input
                   type="text"
                   value={nomeUsuario}
                   onChange={(e) => setNomeUsuario(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-xl"
+                  className="input-login"
                   required
                 />
               </div>
-              <div>
-                <label className="block mb-1 font-medium">Nome do responsável</label>
+              <div className="form-group">
+                <label className="label-login">Nome do responsável</label>
                 <input
                   type="text"
                   value={nomeResponsavel}
                   onChange={(e) => setNomeResponsavel(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-xl"
+                  className="input-login"
                   required
                 />
               </div>
             </>
           )}
 
-          <div>
-            <label className="block mb-1 font-medium">Email do responsável</label>
+          <div className="form-group">
+            <label className="label-login">Email do responsável</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-xl"
+              className="input-login"
               required
             />
           </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Senha</label>
+          <div className="form-group">
+            <label className="label-login">Senha</label>
             <input
               type="password"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="w-full px-3 py-2 border rounded-xl"
+              className="input-login"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition"
+            className="botao-submit"
           >
             {modo === 'login' ? 'Fazer login' : 'Criar conta'}
           </button>
         </form>
 
-        <div className="text-center mt-4">
+        <div className="texto-alternar-modo">
           <button
             onClick={alternarModo}
-            className="text-blue-600 hover:underline text-sm"
+            className="botao-alternar-modo"
           >
             {modo === 'login'
               ? 'Não tem uma conta? Criar conta'

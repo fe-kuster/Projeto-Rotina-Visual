@@ -40,7 +40,7 @@ class TarefaResponse(TarefaBase):
     usuario_id: Optional[int]
 
     class Config:
-        from_attributes = True  # Para compatibilidade com Pydantic v2
+        from_attributes = True
 
 #ROTINA:
 
@@ -48,18 +48,21 @@ class RotinaBase(BaseModel):
     nome: str
 
 class RotinaCreate(RotinaBase):
-    nome: str
     tarefas: list[int]
 
 class RotinaResponse(RotinaBase):
     id: int
     usuario_id: int
     data_criacao: datetime
-    tarefas: List[int]
+    tarefas: List[TarefaResponse]
 
     class Config:
         from_attributes = True
 
+class RotinaUpdate(BaseModel):
+    nome: Optional[str] = None
+    tarefas: Optional[List[int]] = None
+    
 #ESTRELAS
 
 class EstrelaDiariaBase(BaseModel):

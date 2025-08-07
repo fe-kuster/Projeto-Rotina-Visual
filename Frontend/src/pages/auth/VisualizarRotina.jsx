@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { useParams } from "react-router-dom";
 
 export default function VisualizarRotina() {
@@ -11,6 +11,26 @@ export default function VisualizarRotina() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
+  const listaRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (listaRef.current) {
+      listaRef.current.scrollBy({
+        left: -240, // Rola para a esquerda
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (listaRef.current) {
+      listaRef.current.scrollBy({
+        left: 240, // Rola para a direita
+        behavior: 'smooth',
+      });
+    }
+  };
+
   useEffect(() => {
     async function fetchRotina() {
       try {
@@ -22,20 +42,8 @@ export default function VisualizarRotina() {
 
         const rotinaData = await rotinaResp.json();
 
-        const tarefasResp = await fetch(`http://127.0.0.1:8000/tarefas/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!tarefasResp.ok) throw new Error("Erro ao carregar tarefas");
-
-        const todasTarefas = await tarefasResp.json();
-
-        const tarefasOrdenadas = rotinaData.tarefas
-          .map((id) => todasTarefas.find((t) => Number(t.id) === Number(id)))
-          .filter(Boolean);
-
         setNomeDaRotina(rotinaData.nome);
-        setTarefas(tarefasOrdenadas);
+        setTarefas(rotinaData.tarefas);
       } catch (err) {
         console.error(err);
         setErro(err.message);
@@ -63,46 +71,60 @@ export default function VisualizarRotina() {
   if (erro) return <p className="p-6 text-red-600">Erro: {erro}</p>;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">{nomeDaRotina}</h1>
+    <div className="pagina-container">
+      <h1 className="titulo-rotina">{nomeDaRotina}</h1>
 
-      <div className="flex gap-4 overflow-x-auto mb-10 pb-4">
-        {tarefas.map((tarefa) => (
-          <div
-            key={tarefa.id}
-            className={`min-w-[160px] flex-shrink-0 flex flex-col items-center justify-between border rounded-xl p-4 shadow-md transition-all ${
-              concluidas.includes(tarefa.id)
-                ? "border-green-400 bg-green-50"
-                : "bg-white"
-            }`}
-          >
-            <div className="w-20 h-20 bg-gray-200 rounded-full mb-2 overflow-hidden">
-              {tarefa.imagem_url ? (
-                <img
-                  src={tarefa.imagem_url}
-                  alt={tarefa.nome}
-                  className="object-cover w-full h-full"
-                />
-              ) : null}
-            </div>
-            <p className="text-center font-medium text-sm mb-1">
-              {tarefa.nome}
-            </p>
-            <p className="text-yellow-500 text-sm mb-1">{tarefa.estrelas} ⭐</p>
-            <button
-              onClick={() => toggleConclusao(tarefa.id)}
-              className={`text-sm rounded-full px-3 py-1 ${
-                concluidas.includes(tarefa.id)
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200"
+      <div className="container-slider">
+        {/* Botão rolagem esquerda */}
+        <button onClick={scrollLeft} className="botao-slider botao-slider-esquerda">
+          &#10094; {/* Ícone seta esquerda */}
+        </button>
+
+        <div className="lista-tarefas-horizontal" ref={listaRef}>
+          {tarefas.map((tarefa) => (
+            <div
+              key={tarefa.id}
+              className={`cartao-tarefa ${
+                concluidas.includes(tarefa.id) ? 'cartao-tarefa-concluida' : ''
               }`}
             >
-              {concluidas.includes(tarefa.id) ? "✓ Feito" : "Fazer"}
-            </button>
-          </div>
-        ))}
-      </div>
+              <div className="imagem-container">
+                {tarefa.imagem_url ? (
+                  <img
+                    src={tarefa.imagem_url}
+                    alt={tarefa.nome}
+                    className="imagem-tarefa"
+                  />
+                ) : null}
+              </div>
+              <p className="nome-tarefa">{tarefa.nome}</p>
+              <div className="container-estrelas-botao">
+                <p className="estrelas-tarefa">{tarefa.estrelas} ⭐</p>
+                <button
+                  onClick={() => toggleConclusao(tarefa.id)}
+                  className={`botao-conclusao ${
+                    concluidas.includes(tarefa.id)
+                      ? 'botao-conclusao-ativo'
+                      : ''
+                  }`}
+                >
+                  {concluidas.includes(tarefa.id) ? (
+                    <>✓ Feito <span className="emoji-joinha">👍</span></>
+                  ) : (
+                    <>Fazer <span className="emoji-joinha">👍</span></>
+                  )}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
+        {/* Botão rolagem direita */}
+        <button onClick={scrollRight} className="botao-slider botao-slider-direita">
+          &#10095; {/* Ícone seta direita */}
+        </button>
+      </div>
+      
       <div className="flex justify-between items-center">
         <p className="text-lg font-semibold">
           Estrelas acumuladas: {" "}

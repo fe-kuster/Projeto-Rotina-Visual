@@ -36,7 +36,8 @@ class Rotina(Base):
     data_criacao = Column(DateTime, nullable=False, default=datetime.now)
 
     usuario = relationship("Usuario", back_populates="rotinas")
-    tarefas_rotina = relationship("TarefaRotina", back_populates="rotina")
+    tarefas_rotina = relationship("TarefaRotina", back_populates="rotina",                           order_by="TarefaRotina.ordem", cascade="all, delete-orphan")
+    tarefas = relationship("Tarefa", secondary=lambda: TarefaRotina.__table__, primaryjoin=lambda: Rotina.id == TarefaRotina.rotina_id, secondaryjoin=lambda: Tarefa.id == TarefaRotina.tarefa_id, order_by=lambda: TarefaRotina.ordem, lazy="joined", overlaps="tarefas_rotina")
 
 
 class Tarefa(Base):
@@ -52,7 +53,6 @@ class Tarefa(Base):
 
     usuario = relationship("Usuario", back_populates="tarefas")
     tarefas_rotina = relationship("TarefaRotina", back_populates="tarefa", cascade="all, delete-orphan")
-
 
 class TarefaRotina(Base):
     __tablename__ = "tarefas_rotina"
