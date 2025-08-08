@@ -77,19 +77,10 @@ button:focus-visible {
 
 .lista-tarefas-horizontal {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 24px;
-    overflow-x: auto;
-    margin-bottom: 40px;
-    padding-bottom: 16px;
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* Remover barra de rolagem no Webkit (Chrome, Safari, Opera) */
-.lista-tarefas-horizontal::-webkit-scrollbar {
-    display: none;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    gap: 1.5rem;
+    padding: 1rem 0;
 }
 
 .cartao-tarefa {
@@ -140,9 +131,9 @@ button:focus-visible {
 }
 
 .estrelas-tarefa {
-    color: #FBBF24;
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+    color: #999999;
+    font-size: 1.8rem;
+    font-style: bold;
 }
 
 .botao-conclusao {
@@ -152,6 +143,7 @@ button:focus-visible {
     border: 1px solid transparent;
     cursor: pointer;
     transition: background-color 0.25s, color 0.25s;
+    margin-bottom: 8px;
 }
 
 .botao-conclusao-ativo {
@@ -166,6 +158,37 @@ button:focus-visible {
     background-color: #cbd5e0;
 }
 
+.container-info-rotina {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 0 1rem; /* Adiciona um espaço para o conteúdo não ficar grudado nas bordas */
+}
+
+.texto-estrelas-acumuladas {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+}
+
+.estrelas-acumuladas-valor {
+    color: #b8860b; /* Um tom de amarelo-dourado para as estrelas */
+}
+
+.botao-ver-ceu {
+    background-color: #3b82f6; /* Cor azul */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.botao-ver-ceu:hover {
+    background-color: #2563eb; /* Azul um pouco mais escuro no hover */
+}
 
 /* Estilos para EditarRotina.js */
 
@@ -191,51 +214,6 @@ button:focus-visible {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-/* --- Estilos para o novo contêiner do slider e botões --- */
-
-.container-slider {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 40px;
-}
-
-.botao-slider {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.4);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.botao-slider:hover {
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.botao-slider-esquerda {
-    left: -20px;
-}
-
-.botao-slider-direita {
-    right: -20px;
-}
-
-.container-slider .lista-tarefas-horizontal {
-    width: 100%;
 }
 
 .emoji-joinha {
@@ -597,7 +575,7 @@ button:focus-visible {
 }
 
 .cartao-criar-tarefa {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -669,7 +647,7 @@ button:focus-visible {
 /* Seção de seleção de estrelas */
 .lista-estrelas {
     display: flex;
-    gap: 0.8rem;
+    gap: 1rem;
 }
 
 .botao-estrela {
@@ -681,10 +659,11 @@ button:focus-visible {
     cursor: pointer;
     transition: all 0.2s;
     font-weight: 650;
+    font-size: 20px;
 }
 
 .botao-estrela.selecionado {
-    background-color: #3b82f6; 
+    background-color: #4b5563; 
     color: #ffffff;
     border-color: #3b82f6;
 }
@@ -821,7 +800,7 @@ button:focus-visible {
 }
 
 .botao-criar-tarefa-editar {
-    background-color: #10b981;
+    background-color: #1d4ed8;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 0.75rem;
