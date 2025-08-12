@@ -1,43 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function CriarTarefa() {
   const [nome, setNome] = useState('');
-  const [imagem, setImagem] = useState('');
+  const [imagemUrl, setImagemUrl] = useState('');
+  const [altText, setAltText] = useState('');
   const [estrelas, setEstrelas] = useState(1);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
-  // Array de imagens sugeridas (ainda incompleto)
   const imagensSugeridas = [
-    { id: 'img1', url: 'https://i.imgur.com/639ak9W.png' },
-    { id: 'img2', url: 'https://i.imgur.com/TwAITLV.png' },
-    { id: 'img3', url: 'https://i.imgur.com/woEnnwm.png' },
-    { id: 'img4', url: 'https://i.imgur.com/j1134bL.jpeg' },
-    { id: 'img5', url: 'https://i.imgur.com/Z9sUOP9.png' },
-    { id: 'img6', url: 'https://i.imgur.com/ZqZGnyx.png' },
-    { id: 'img7', url: 'https://i.imgur.com/mSmFRTh.png' },
-    { id: 'img3', url: 'https://i.imgur.com/fdSagM4.png' },
-    { id: 'img4', url: 'https://i.imgur.com/dxzpmCZ.png' },
-    { id: 'img5', url: 'https://i.imgur.com/Ghuc7ye.png' },
-    { id: 'img6', url: 'https://i.imgur.com/2k8H7Bm.png' },
-    { id: 'img7', url: 'https://i.imgur.com/NhQ5CHn.png' },
-    { id: 'img3', url: 'https://i.imgur.com/VmRDv84.png' },
-    { id: 'img4', url: 'https://i.imgur.com/sS8TRqE.png' },
-    { id: 'img5', url: 'https://i.imgur.com/0eFHOXq.png' },
-    { id: 'img6', url: 'https://i.imgur.com/r1kd4FD.png' },
-    { id: 'img7', url: 'https://i.imgur.com/C4ujVEE.png' },
-    { id: 'img7', url: 'https://i.imgur.com/N5ne7eP.png' },
-    { id: 'img7', url: 'https://i.imgur.com/TqF8Lkj.png' },
+    { id: 'img1', url: 'https://i.imgur.com/639ak9W.png', alt_text: 'Menina e menino felizes, sentados à mesa, tomando café da manhã composto por uma caneca, uma fatia de pão e uma laranja.'},
+    { id: 'img2', url: 'https://i.imgur.com/TwAITLV.png', alt_text: 'Menina e menino sentados à mesa, almoçando bem felizes.'},
+    { id: 'img3', url: 'https://i.imgur.com/woEnnwm.png', alt_text: 'Menina e menino sentados à mesa, jantando felizes.'},
+    { id: 'img4', url: 'https://i.imgur.com/j1134bL.jpeg', alt_text: 'Menina e menino entregando o bico para a mamãe guardar, felizes pois poderão brincar sem se preocupar com os bicos.'},
+    { id: 'img5', url: 'https://i.imgur.com/Z9sUOP9.png', alt_text: 'Criança feliz no banheiro, onde vai fazer seu xixi ou cocô no vaso sanitário.'},
+    { id: 'img6', url: 'https://i.imgur.com/ZqZGnyx.png', alt_text: 'Criança corajosa sentada na cadeira da dentista, com a boca aberta para a doutora ajudar a cuidar dos dentinhos.'},
+    { id: 'img7', url: 'https://i.imgur.com/mSmFRTh.png', alt_text: 'Criança corajosa dentando na maca no consultório médico, esperando o doutor fazer um exame.'},
+    { id: 'img8', url: 'https://i.imgur.com/fdSagM4.png', alt_text: 'Criança indo feliz para a clinica para a hora da terapia.'},
+    { id: 'img9', url: 'https://i.imgur.com/dxzpmCZ.png', alt_text: 'Crianças felizes guardando os brinquedos, depois de se divertir muito.'},
+    { id: 'img10', url: 'https://i.imgur.com/Ghuc7ye.png', alt_text: 'Crianças prontas para dormir, já de pijama e com seus ursinhos no quarto em frente a sua cama.'},
+    { id: 'img11', url: 'https://i.imgur.com/2k8H7Bm.png', alt_text: 'Criança feliz no banheiro segurando sua toalha, pronta para a hora de tomar banho e ficar limpinha'},
+    { id: 'img12', url: 'https://i.imgur.com/NhQ5CHn.png', alt_text: 'Crianças felizes brincando com o que gostam, jogando jogos, videogame ou bola.'},
+    { id: 'img13', url: 'https://i.imgur.com/VmRDv84.png', alt_text: 'Crianças felizes indo para a escola, com roupa da escola e suas mochilas nas costas.'},
+    { id: 'img14', url: 'https://i.imgur.com/sS8TRqE.png', alt_text: 'Crianças felizes se vestindo.'},
+    { id: 'img15', url: 'https://i.imgur.com/0eFHOXq.png', alt_text: 'Menino feliz em frente a pia do banheiro, segurando sua escova e escovando os dentes, com a boca cheia de espuma.'},
+    { id: 'img16', url: 'https://i.imgur.com/r1kd4FD.png', alt_text: 'Menina feliz em frente a pia do banheiro, segurando sua escova e escovando os dentes, com a boca cheia de espuma.'},
+    { id: 'img17', url: 'https://i.imgur.com/C4ujVEE.png', alt_text: 'Menina feliz na hora de tomar vacina, braço da enfermeira segura e aplica a injeção no braço da menina. Ao lado dela, o menino já tomou sua vacina e está orgulhoso com seu curativo no braço.'},
+    { id: 'img18', url: 'https://i.imgur.com/N5ne7eP.png', alt_text: 'Crianças felizes com seus lápis e cadernos, fazendo a lição de casa.'},
+    { id: 'img19', url: 'https://i.imgur.com/TqF8Lkj.png', alt_text: 'Crianças no consultório médico felizes e sem medo enquanto a doutora escuta o coração e conversa com as crianças.'},
   ];
+
+  const handleImagemSelect = (imagemSelecionada) => {
+    setImagemUrl(imagemSelecionada.url);
+    setAltText(imagemSelecionada.alt_text);
+  };
+  
+  // UseEffect para monitorar se o estado de imagemUrl está sendo atualizado.
+  // Quando uma imagem é selecionada, você verá este log.
+  useEffect(() => {
+    if(imagemUrl) {
+      console.log('O estado de imagemUrl foi atualizado para:', imagemUrl);
+      console.log('O estado de altText foi atualizado para:', altText);
+    }
+  }, [imagemUrl, altText]);
+
 
   async function salvarTarefa(e) {
     e.preventDefault();
 
-    if (!nome || !imagem || !estrelas) {
+    if (!nome || !imagemUrl || !estrelas) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
+    
+    const payload = {
+      nome: nome,
+      imagem_url: imagemUrl,
+      estrelas: estrelas,
+      alt_text: altText
+    };
+    console.log('Dados enviados para a API:', payload);
 
     try {
       const response = await fetch("http://127.0.0.1:8000/tarefas/", {
@@ -46,11 +69,7 @@ export default function CriarTarefa() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({
-          nome: nome,
-          imagem_url: imagem,
-          estrelas: estrelas
-        })
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -94,9 +113,9 @@ export default function CriarTarefa() {
                 <img
                   key={img.id}
                   src={img.url}
-                  alt={img.id}
-                  className={`imagem-sugerida ${imagem === img.url ? 'selecionada' : ''}`}
-                  onClick={() => setImagem(img.url)}
+                  alt={img.alt_text}
+                  className={`imagem-sugerida ${imagemUrl === img.url ? 'selecionada' : ''}`}
+                  onClick={() => handleImagemSelect(img)}
                 />
               ))}
             </div>

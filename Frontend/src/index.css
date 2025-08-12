@@ -84,15 +84,14 @@ button:focus-visible {
 }
 
 .cartao-tarefa {
-    min-width: 200px;
+    min-width: 180px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     border: 1px solid #e2e8f0; 
     border-radius: 12px;
-    padding: 16px 10px;
+    padding: 6px 4px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: all 0.2s ease-in-out;
     background-color: #ffffff;
@@ -104,8 +103,8 @@ button:focus-visible {
 }
 
 .imagem-container {
-    width: 180px;
-    height: 210px;
+    width: 150px;
+    height: 180px;
     background-color: #e2e8f0;
     border-radius: 8px;
     margin-bottom: 8px;
@@ -119,31 +118,32 @@ button:focus-visible {
 .imagem-tarefa {
     object-fit: cover;
     width: 100%;
-    height: 100%;
 }
 
 .nome-tarefa {
     text-align: center;
     font-weight: 500;
     font-size: 1.1rem;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 0.5px;
+    margin-bottom: 0.5px;
 }
 
 .estrelas-tarefa {
-    color: #999999;
-    font-size: 1.8rem;
+    color: #2d3748;
+    font-size: 28px;
+    font-weight: 600;
     font-style: bold;
+    margin: 0px;
 }
 
 .botao-conclusao {
     font-size: 1.1rem;
     border-radius: 9999px;
-    padding: 4px 12px;
+    padding: 4px 4px;
     border: 1px solid transparent;
     cursor: pointer;
     transition: background-color 0.25s, color 0.25s;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .botao-conclusao-ativo {
@@ -163,24 +163,26 @@ button:focus-visible {
     justify-content: space-between;
     align-items: center;
     margin-top: 2rem;
-    padding: 0 1rem; /* Adiciona um espaço para o conteúdo não ficar grudado nas bordas */
+    padding: 0 1rem;
 }
 
 .texto-estrelas-acumuladas {
-    font-size: 1.125rem; /* 18px */
+    font-size: 20px;
     font-weight: 600;
 }
 
 .estrelas-acumuladas-valor {
-    color: #b8860b; /* Um tom de amarelo-dourado para as estrelas */
+    color: #2d3748; 
+    font-weight: 500;
 }
 
 .botao-ver-ceu {
-    background-color: #3b82f6; /* Cor azul */
+    background-color: #2d3748;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 0.75rem;
     font-weight: 500;
+    font-size: 18px;
     cursor: pointer;
     border: none;
     transition: background-color 0.2s;
@@ -188,6 +190,15 @@ button:focus-visible {
 
 .botao-ver-ceu:hover {
     background-color: #2563eb; /* Azul um pouco mais escuro no hover */
+}
+
+.container-estrelas-botao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+    margin-bottom: 8px;
 }
 
 /* Estilos para EditarRotina.js */
@@ -221,12 +232,6 @@ button:focus-visible {
     line-height: 1;
     vertical-align: sub;
     display: inline-block;
-}
-
-.container-estrelas-botao {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 /* Estilos para a página de Login/Cadastro */

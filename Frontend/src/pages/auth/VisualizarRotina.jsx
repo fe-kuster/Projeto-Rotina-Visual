@@ -66,7 +66,7 @@ export default function VisualizarRotina() {
             {tarefa.imagem_url ? (
               <img
                 src={tarefa.imagem_url}
-                alt={tarefa.nome}
+                alt={tarefa.alt_text}
                 className="imagem-tarefa"
               />
             ) : null}

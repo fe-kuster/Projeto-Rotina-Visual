@@ -11,7 +11,8 @@ router = APIRouter(prefix="/estrelas-diarias", tags=["Estrelas Diárias"])
 DIFICULDADE_ESTRELAS = {
     "facil": 1,
     "medio": 2,
-    "dificil": 3
+    "dificil": 3,
+    "muitodificil": 4,
 }
 
 @router.post("/gerar", response_model=EstrelaDiariaResponse)

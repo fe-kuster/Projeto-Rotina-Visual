@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Security
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from database import get_db, SessionLocal
-from models import Tarefa, Usuario
+from models import Tarefa, Usuario, DificuldadeEnum
 import schemas
 from schemas import TarefaResponse
 from auth import verificar_token
@@ -25,12 +25,26 @@ def get_db():
 def criar_tarefa(tarefa: schemas.TarefaCreate, 
                  db: Session = Depends(get_db),
                  user_id: int = Depends(get_current_user_id)):
+    
+    mapeamento_dificuldade = {
+        1: DificuldadeEnum.FACIL,
+        2: DificuldadeEnum.MEDIO,
+        3: DificuldadeEnum.DIFICIL,
+        4: DificuldadeEnum.MUITO_DIFICIL,
+    }
+
+    # Calcula dificuldade com base nas estrelas, usa FACIL como padrão
+    dificuldade_calculada = mapeamento_dificuldade.get(int(tarefa.estrelas), DificuldadeEnum.FACIL)
+
+
     nova_tarefa = Tarefa(
         usuario_id=user_id,
         nome=tarefa.nome,
-        dificuldade=tarefa.dificuldade,
+        imagem_url=tarefa.imagem_url,
+        dificuldade=dificuldade_calculada,
         categoria=tarefa.categoria,
-        estrelas=tarefa.estrelas
+        estrelas=tarefa.estrelas,
+        alt_text=tarefa.alt_text
     )
     db.add(nova_tarefa)
     db.commit()

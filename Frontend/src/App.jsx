@@ -16,7 +16,6 @@ function App() {
         <Route path="/montar-rotina/:id" element={<EditarRotina />} />
         <Route path="/rotina/:id" element={<VisualizarRotina />} />
         <Route path="/criar-tarefa" element={<CriarTarefa />} />
-        {/* outras rotas futuras vão aqui */}
       </Routes>
     </BrowserRouter>
   );

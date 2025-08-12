@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Literal, List, Optional
 from models import DificuldadeEnum
 from datetime import datetime, date
@@ -17,30 +17,28 @@ class UsuarioResponse(BaseModel):
     nome_responsavel: str
     email_responsavel: EmailStr
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 #TAREFAS
 
-from pydantic import BaseModel
-from typing import Optional
-
-class TarefaBase(BaseModel):
+class TarefaCreate(BaseModel):
     nome: str
     imagem_url: Optional[str] = None
     dificuldade: Optional[DificuldadeEnum] = None
     categoria: Optional[str] = None
     estrelas: Optional[int] = 1
-
-class TarefaCreate(TarefaBase):
-    pass
-
-class TarefaResponse(TarefaBase):
+    alt_text: Optional[str] = None
+    
+class TarefaResponse(BaseModel):
     id: int
+    nome: str
+    imagem_url: Optional [str] = None
+    categoria: Optional[str] = None
+    estrelas: Optional[int] = 1
+    alt_text: Optional[str] = None
     usuario_id: Optional[int]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 #ROTINA:
 
@@ -56,8 +54,7 @@ class RotinaResponse(RotinaBase):
     data_criacao: datetime
     tarefas: List[TarefaResponse]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class RotinaUpdate(BaseModel):
     nome: Optional[str] = None
@@ -76,8 +73,7 @@ class EstrelaDiariaResponse(EstrelaDiariaBase):
     id: int
     usuario_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 #tarefas_rotina
 
@@ -94,5 +90,4 @@ class TarefaRotinaResponse(TarefaRotinaBase):
     id: int
     usuario_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

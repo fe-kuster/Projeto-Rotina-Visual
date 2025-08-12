@@ -7,9 +7,10 @@ from database import Base
 import enum
 
 class DificuldadeEnum(enum.Enum):
-    facil = "facil"
-    medio = "medio"
-    dificil = "dificil"
+    FACIL = "FACIL"
+    MEDIO = "MEDIO"
+    DIFICIL = "DIFICIL"
+    MUITO_DIFICIL = "MUITO_DIFICIL"
 
 
 class Usuario(Base): 
@@ -50,6 +51,7 @@ class Tarefa(Base):
     dificuldade = Column(Enum(DificuldadeEnum), nullable=False)
     categoria = Column(String(50))
     estrelas = Column(Integer, nullable=False, default=1)
+    alt_text = Column(String(255))
 
     usuario = relationship("Usuario", back_populates="tarefas")
     tarefas_rotina = relationship("TarefaRotina", back_populates="tarefa", cascade="all, delete-orphan")
