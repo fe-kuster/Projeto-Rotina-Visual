@@ -1,24 +1,14 @@
+import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from urllib.parse import quote
-import os 
-from dotenv import load_dotenv
+from sqlalchemy.ext.declarative import declarative_base
 
-load_dotenv()
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = quote(os.getenv("DB_PASSWORD"))
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "3306")
-DB_NAME = os.getenv("DB_NAME")
+if not DATABASE_URL:
+    raise ValueError("A variável de ambiente 'DATABASE_URL' não foi configurada. Certifique-se de adicioná-la no Vercel.")
 
-if not all([DB_USER, DB_PASSWORD, DB_NAME]):
-    raise ValueError("Credenciais do banco de dados incompletas nas variáveis de ambiente. Verifique seu arquivo .env")
-
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, pool_recycle=3600)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -27,6 +17,8 @@ Base = declarative_base()
 def get_db():
     db = SessionLocal()
     try:
+        # 'yield' fornece a sessão do banco de dados para a rota
         yield db
     finally:
+        # 'finally' garante que a conexão será fechada, mesmo se houver um erro
         db.close()
