@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginCadastro from './pages/Auth/LoginCadastro';
-import SuasRotinas from './pages/Auth/SuasRotinas';
-import MontarRotina from './pages/Auth/MontarRotina';
-import EditarRotina from './pages/Auth/EditarRotina';
-import VisualizarRotina from './pages/Auth/VisualizarRotina';
-import CriarTarefa from './pages/Auth/CriarTarefas';
+import LoginCadastro from './pages/auth/LoginCadastro';
+import SuasRotinas from './pages/auth/SuasRotinas';
+import MontarRotina from './pages/auth/MontarRotina';
+import EditarRotina from './pages/auth/EditarRotina';
+import VisualizarRotina from './pages/auth/VisualizarRotina';
+import CriarTarefa from './pages/auth/CriarTarefas';
 
 function App() {
   return (
