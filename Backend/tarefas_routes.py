@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Security
+from fastapi import APIRouter, Depends, HTTPException, Security, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from database import get_db, SessionLocal
@@ -80,11 +80,37 @@ def atualizar_tarefa(tarefa_id: int, tarefa_update: schemas.TarefaCreate,
     db.refresh(tarefa)
     return tarefa
 
-@router.delete("/tarefas/{tarefa_id}")
-def deletar_tarefa(tarefa_id: int, db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
-    tarefa = db.query(Tarefa).filter(Tarefa.id == tarefa_id, Tarefa.usuario_id == user_id).first()
+@router.delete("/tarefas/{tarefa_id}", status_code=status.HTTP_200_OK)
+def excluir_tarefa(
+    tarefa_id: int,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id)
+):
+
+    # 1. Busca a tarefa pelo ID e verifica se pertence ao usuário logado
+    tarefa = (
+        db.query(Tarefa)
+        .filter(Tarefa.id == tarefa_id, Tarefa.usuario_id == user_id)
+        .first()
+    )
+
     if not tarefa:
-        raise HTTPException(status_code=404, detail="Tarefa não encontrada")
-    db.delete(tarefa)
-    db.commit()
-    return {"detail": "Tarefa deletada com sucesso"}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Tarefa não encontrada ou você não tem permissão para excluí-la."
+        )
+
+    try:
+        db.delete(tarefa)
+        db.commit()
+     
+        
+    except Exception as e:
+        # Em caso de erro, desfaz as alterações p manter o banco consistente
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erro interno ao excluir a tarefa: {e}"
+        )
+
+    return {"message": "Tarefa excluída com sucesso."}

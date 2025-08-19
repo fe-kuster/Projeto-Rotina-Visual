@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function EditarRotina() {
@@ -8,6 +8,8 @@ export default function EditarRotina() {
   const [nomeDaRotina, setNomeDaRotina] = useState("");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
+  const [modal, setModal] = useState({ isVisible: false, message: "", type: null, tarefaId: null });
+  
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -53,6 +55,56 @@ export default function EditarRotina() {
 
     carregarDados();
   }, [id, token]);
+  
+ //  Função para abrir o modal
+  const abrirModal = (message, type, tarefaId = null) => {
+    setModal({
+      isVisible: true,
+      message,
+      type,
+      tarefaId
+    });
+  };
+
+  // Abrir modal de confirmação de exclusão
+  const handleExcluirClick = (tarefaId) => {
+    abrirModal("Tem certeza que deseja excluir esta tarefa?", "confirmacao", tarefaId);
+  };
+
+  // Confirmar exclusão de uma tarefa específica
+  const confirmarExclusao = async () => {
+    if (!modal.tarefaId) return;
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/tarefas/${modal.tarefaId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Erro ao excluir tarefa.");
+      }
+      
+      // Se exclusão bem-sucedida, atualiza o estado local
+      setTarefasDisponiveis((prevTarefas) => 
+        prevTarefas.filter((t) => t.id !== modal.tarefaId)
+      );
+      setTarefasSelecionadas((prevTarefas) => 
+        prevTarefas.filter((t) => t.id !== modal.tarefaId)
+      );
+      
+      abrirModal("Tarefa excluída com sucesso!", "sucesso");
+      
+    } catch (err) {
+      console.error("Erro ao excluir tarefa:", err);
+      // Exibe mensagem de erro
+      abrirModal(err.message || "Erro ao excluir tarefa.", "erro");      
+    }
+  };
 
   function toggleTarefa(tarefa) {
     const existe = tarefasSelecionadas.find((t) => t.id === tarefa.id);
@@ -91,10 +143,11 @@ export default function EditarRotina() {
         throw new Error("Erro ao salvar alterações");
       }
 
-      alert("Rotina atualizada com sucesso!");
-      navigate(`/rotina/${id}`);
+      abrirModal("Rotina atualizada com sucesso!", "sucesso");
+      
     } catch (err) {
-      alert(err.message);
+      // SUBSTITUÍDO: alert(err.message)
+      abrirModal(err.message, "erro");
     }
   }
 
@@ -104,6 +157,9 @@ export default function EditarRotina() {
   return (
     <div className="pagina-editar-rotina">
       <div className="cartao-editar-rotina">
+        <Link to={`/rotina/${id}`} className="botao-voltar">
+             Voltar
+        </Link>
         <h1 className="titulo-editar-rotina">Editar rotina</h1>
 
         {/* Nome da rotina */}
@@ -117,7 +173,6 @@ export default function EditarRotina() {
           />
         </div>
 
-        {/* Tarefas disponíveis */}
         <div className="form-group-editar">
           <h2 className="subtitulo-editar-rotina">Tarefas disponíveis</h2>
           <div className="lista-tarefas-disponiveis">
@@ -137,13 +192,15 @@ export default function EditarRotina() {
             ))}
           </div>
 
-          {/* Botão para criar nova tarefa */}
-          <div className="form-group-editar" style={{ marginTop: "1rem" }}>
-            <button
-              onClick={() => navigate("/criar-tarefa")}
-              className="botao-criar-tarefa-editar"
-            >
+          <div className="container-botoes-tarefa-acao">
+            <Link to="/criar-tarefa" className="botao-criar-tarefa">
               Criar nova tarefa
+            </Link>
+            <button
+              onClick={() => abrirModal("", "gerenciar")}
+              className="botao-gerenciar-tarefas"
+            >
+              Gerenciar Tarefas
             </button>
           </div>
         </div>
@@ -192,6 +249,65 @@ export default function EditarRotina() {
           Salvar alterações
         </button>
       </div>
+
+      {modal.isVisible && (
+        <div className="modal-overlay">
+          {modal.type === "gerenciar" && (
+            <div className="modal-container-gerenciar">
+              <h3 className="subtitulo-modal">Gerenciar Tarefas</h3>
+              <p>Selecione uma tarefa para excluí-la.</p>
+              <div className="lista-modal-tarefas">
+                {tarefasDisponiveis.map((tarefa) => (
+                  <div key={tarefa.id} className="item-modal-tarefa">
+                    <span>{tarefa.nome}</span>
+                    <button
+                      onClick={() => handleExcluirClick(tarefa.id)}
+                      className="botao-excluir-tarefa"
+                    >
+                      Excluir
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => setModal({ isVisible: false, message: "", type: null, tarefaId: null })}
+                className="botao-fechar-modal"
+              >
+                Fechar
+              </button>
+            </div>
+          )}
+
+          {/* Modal confirmação, sucesso ou erro */}
+          {(modal.type === "confirmacao" || modal.type === "sucesso" || modal.type === "erro" || modal.type === "alerta") && (
+            <div className="modal-container">
+              <p className="modal-mensagem">{modal.message}</p>
+              {modal.type === "confirmacao" ? (
+                <div className="modal-confirmacao-botoes">
+                  <button onClick={confirmarExclusao} className="botao-ok-confirmacao">
+                    Ok
+                  </button>
+                  <button onClick={() => setModal({ isVisible: false, message: "", type: null, tarefaId: null })} className="botao-cancelar-confirmacao">
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
+                <div className="modal-confirmacao-botoes">
+                  <button onClick={() => {
+                    setModal({ isVisible: false, message: "", type: null, tarefaId: null });
+                    // Se for sucesso de atualização, navega de volta
+                    if (modal.type === 'sucesso') {
+                      navigate(`/rotina/${id}`);
+                    }
+                  }} className="botao-ok-confirmacao">
+                    Ok
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

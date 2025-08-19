@@ -36,7 +36,7 @@ export default function SuasRotinas() {
   }
 
   function editarRotina(id) {
-    navigate(`/montar-rotina/${id}`);
+    navigate(`/editar-rotina/${id}`);
   }
 
   async function excluirRotina(id) {

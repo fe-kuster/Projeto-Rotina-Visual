@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<LoginCadastro />} />
         <Route path="/rotina" element={<SuasRotinas />} />
         <Route path="/montar-rotina" element={<MontarRotina />} />
-        <Route path="/montar-rotina/:id" element={<EditarRotina />} />
+        <Route path="/editar-rotina/:id" element={<EditarRotina />} />
         <Route path="/rotina/:id" element={<VisualizarRotina />} />
         <Route path="/criar-tarefa" element={<CriarTarefa />} />
       </Routes>

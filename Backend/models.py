@@ -66,8 +66,8 @@ class TarefaRotina(Base):
     status_concluida = Column(Boolean, default=False)
     usuario_id = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
 
-    rotina = relationship("Rotina", back_populates="tarefas_rotina")
-    tarefa = relationship("Tarefa", back_populates="tarefas_rotina")
+    rotina = relationship("Rotina", back_populates="tarefas_rotina", overlaps="tarefas")
+    tarefa = relationship("Tarefa", back_populates="tarefas_rotina", overlaps="tarefas")
     usuario = relationship("Usuario", back_populates="tarefas_rotina")
 
 

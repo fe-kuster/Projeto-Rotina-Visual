@@ -200,8 +200,10 @@ button:focus-visible {
     gap: 12px;
     margin-bottom: 8px;
 }
+/* ---Fim dos Estilos para VisualizarRotina.js --- */
 
-/* Estilos para EditarRotina.js */
+
+/* --- Estilos para EditarRotina.js --- */
 
 .tarefa-selecionada-edicao {
     padding: 12px;
@@ -236,7 +238,7 @@ button:focus-visible {
 
 /* Estilos para a página de Login/Cadastro */
 .pagina-login-cadastro {
-    background-image: url('https://i.imgur.com/RctiX1N.png');
+    background-image: url('https://i.imgur.com/uV2tDZb.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -320,9 +322,11 @@ button:focus-visible {
     text-decoration: underline;
 }
 
-/* Estilos para a página "Suas Rotinas" */
+/* --- FIm dos Estilos para EditarRotina.js --- */
+
+/* --- Estilos para a página "Suas Rotinas" --- */
 .pagina-suas-rotinas {
-    background-image: url('https://i.imgur.com/HEjgxEq.png');
+    background-image: url('https://i.imgur.com/G8SLnZM.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -393,6 +397,8 @@ button:focus-visible {
     gap: 0.5rem;
 }
 
+/* --- Fim dos Estilos para a página "Suas Rotinas" --- */
+
 /* Botões com estilo do login: contorno preto e fundo branco */
 .botao-acao {
     background-color: white;
@@ -434,9 +440,9 @@ button:focus-visible {
 }
 
 
-/* Estilos para a página "Montar Rotina" */
+/* --- Estilos para a página "Montar Rotina" --- */
 .pagina-montar-rotina {
-    background-image: url('https://i.imgur.com/HEjgxEq.png');
+    background-image: url('https://i.imgur.com/G8SLnZM.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -447,12 +453,12 @@ button:focus-visible {
 }
 
 .cartao-montar-rotina {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 1.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 64rem; /* max-w-4xl */
+    max-width: 64rem;
 }
 
 .titulo-montar-rotina {
@@ -523,11 +529,179 @@ button:focus-visible {
     border-radius: 0.75rem;
     cursor: pointer;
     transition: background-color 0.2s;
+    flex: 1;
 }
 
 .botao-criar-tarefa:hover {
     background-color: #f0f0f0;
 }
+
+.botao-gerenciar-tarefas {
+    flex: 1;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+     transition: background-color 0.2s;
+}
+
+.botao-gerenciar-tarefas:hover {
+    background-color: #f0f0f0;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.25rem; 
+  font-weight: 500;
+}
+
+.container-botoes-tarefa-acao {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+/* --- Estilos para o Modal de Gerenciamento e Alerta --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container-gerenciar, .modal-container, .modal-container-status {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  width: 30rem;
+  box-sizing: border-box;
+}
+
+.modal-container-status {
+    text-align: center;
+    padding: 1rem;
+}
+
+.subtitulo-modal {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.lista-modal-tarefas {
+    max-height: 20rem; 
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.item-modal-tarefa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.item-modal-tarefa:last-child {
+    border-bottom: none;
+}
+
+.botao-excluir-tarefa {
+    background-color: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.botao-excluir-tarefa:hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+.botao-fechar-modal {
+    width: 100%;
+    background-color: black;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: none;
+    margin-top: 1rem;
+}
+
+.botao-fechar-modal:hover {
+    background-color: #333;
+}
+
+.modal-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.modal-confirmacao-botoes {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.botao-cancelar-confirmacao {
+    background-color: white;
+    color: #4a5568;
+    border: 1px solid #4a5568;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.botao-cancelar-confirmacao:hover {
+    background-color: #4a5568;
+    color: white;
+}
+
+.botao-ok-confirmacao {
+    background-color: white;
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.botao-ok-confirmacao:hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+.modal-mensagem {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
 
 /* Estilos para a área de arrastar e soltar */
 .area-drag-and-drop {
@@ -566,9 +740,12 @@ button:focus-visible {
     background-color: #f0f0f0;
 }
 
-/* Estilos para a página "Criar Tarefa" */
+/* --- FIM dos Estilos para a página "Montar Rotina" --- */
+
+
+/* --- Estilos para a página "Criar Tarefa" --- */
 .pagina-criar-tarefa {
-    background-image: url('https://i.imgur.com/HEjgxEq.png');
+    background-image: url('https://i.imgur.com/G8SLnZM.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -693,9 +870,12 @@ button:focus-visible {
     background-color: #f0f0f0;
 }
 
-/* Estilos para a página "Editar Rotina" */
+/* --- FIM dos Estilos para a página "Criar Tarefa" --- */
+
+
+/* --- Estilos para a página "Editar Rotina" --- */
 .pagina-editar-rotina {
-    background-image: url('https://i.imgur.com/HEjgxEq.png');
+    background-image: url('https://i.imgur.com/G8SLnZM.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -707,7 +887,7 @@ button:focus-visible {
 }
 
 .cartao-editar-rotina {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 1.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -817,3 +997,5 @@ button:focus-visible {
 .botao-criar-tarefa-editar:hover {
     background-color: #059669;
 }
+
+/* --- FIM dos Estilos para a página "Editar Rotina" --- */
