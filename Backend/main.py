@@ -6,12 +6,10 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import engine, SessionLocal, get_db
-from . import models
 from models import Base, Usuario
 import schemas
 from utils import hash_senha, verificar_senha
-from auth import criar_token, verificar_token
-from auth import auth_router
+from auth import criar_token, verificar_token, auth_router, get_current_user
 from utils_errors import (
     erro_400_email_ja_cadastrado,
     erro_403_login_incorreto,
@@ -19,16 +17,10 @@ from utils_errors import (
     erro_404_usuario_nao_encontrado
 )
 from fastapi.middleware.cors import CORSMiddleware
-from database import engine, SessionLocal
-from auth import get_current_user
 
 # Inicializa app e banco
 app = FastAPI()
-app.include_router(auth_router)
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
-models.Base.metadata.create_all(bind=engine)
 from tarefas_routes import router as tarefas_router
 app.include_router(tarefas_router)
 from rotinas_routes import router as rotinas_router
@@ -37,11 +29,19 @@ from tarefas_rotinas_routes import router as tarefas_rotina_router
 app.include_router(tarefas_rotina_router)
 from estrelas_routes import router as estrelas_router
 app.include_router(estrelas_router)
+app.include_router(auth_router)
 
+Base.metadata.create_all(bind=engine)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+origins = [
+    "http://localhost:3000",
+    "https://projeto-rotina-visual-p1cg.vercel.app"
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
