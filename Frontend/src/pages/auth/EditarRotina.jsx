@@ -10,6 +10,9 @@ export default function EditarRotina() {
   const [erro, setErro] = useState(null);
   const [modal, setModal] = useState({ isVisible: false, message: "", type: null, tarefaId: null });
   
+  // URL base do backend publicado na Vercel
+  const BACKEND_BASE_URL = "https://projeto-rotina-visual-p1cg.vercel.app";
+
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -17,7 +20,7 @@ export default function EditarRotina() {
   useEffect(() => {
     async function carregarDados() {
       try {
-        const rotinaResp = await fetch(`http://127.0.0.1:8000/rotinas/${id}/`, {
+        const rotinaResp = await fetch(`${BACKEND_BASE_URL}/rotinas/${id}/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -27,7 +30,7 @@ export default function EditarRotina() {
 
         const rotinaData = await rotinaResp.json();
 
-        const tarefasResp = await fetch("http://127.0.0.1:8000/tarefas/", {
+        const tarefasResp = await fetch(`${BACKEND_BASE_URL}/tarefas/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -56,7 +59,6 @@ export default function EditarRotina() {
     carregarDados();
   }, [id, token]);
   
- //  Função para abrir o modal
   const abrirModal = (message, type, tarefaId = null) => {
     setModal({
       isVisible: true,
@@ -66,18 +68,16 @@ export default function EditarRotina() {
     });
   };
 
-  // Abrir modal de confirmação de exclusão
   const handleExcluirClick = (tarefaId) => {
     abrirModal("Tem certeza que deseja excluir esta tarefa?", "confirmacao", tarefaId);
   };
 
-  // Confirmar exclusão de uma tarefa específica
   const confirmarExclusao = async () => {
     if (!modal.tarefaId) return;
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/tarefas/${modal.tarefaId}`,
+        `${BACKEND_BASE_URL}/tarefas/${modal.tarefaId}`,
         {
           method: "DELETE",
           headers: {
@@ -89,7 +89,6 @@ export default function EditarRotina() {
         throw new Error("Erro ao excluir tarefa.");
       }
       
-      // Se exclusão bem-sucedida, atualiza o estado local
       setTarefasDisponiveis((prevTarefas) => 
         prevTarefas.filter((t) => t.id !== modal.tarefaId)
       );
@@ -125,7 +124,7 @@ export default function EditarRotina() {
 
   async function salvarAlteracoes() {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/rotinas/${id}/`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/rotinas/${id}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +145,6 @@ export default function EditarRotina() {
       abrirModal("Rotina atualizada com sucesso!", "sucesso");
       
     } catch (err) {
-      // SUBSTITUÍDO: alert(err.message)
       abrirModal(err.message, "erro");
     }
   }
@@ -295,7 +293,6 @@ export default function EditarRotina() {
                 <div className="modal-confirmacao-botoes">
                   <button onClick={() => {
                     setModal({ isVisible: false, message: "", type: null, tarefaId: null });
-                    // Se for sucesso de atualização, navega de volta
                     if (modal.type === 'sucesso') {
                       navigate(`/rotina/${id}`);
                     }

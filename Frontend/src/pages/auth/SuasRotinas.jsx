@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function SuasRotinas() {
   const [rotinas, setRotinas] = useState([]);
@@ -7,16 +8,22 @@ export default function SuasRotinas() {
   const [erro, setErro] = useState(null);
   const navigate = useNavigate();
 
+  const BACKEND_BASE_URL = "https://projeto-rotina-visual-p1cg.vercel.app";
+
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    buscarRotinas();
-  }, [token]);
+    if (!token) {
+      navigate("/");
+    } else {
+      buscarRotinas();
+    }
+  }, [token, navigate]);
 
   async function buscarRotinas() {
     try {
       setCarregando(true);
-      const response = await fetch("http://127.0.0.1:8000/rotinas/", {
+      const response = await fetch(`${BACKEND_BASE_URL}/rotinas/`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -40,29 +47,47 @@ export default function SuasRotinas() {
   }
 
   async function excluirRotina(id) {
-    const confirmar = window.confirm("Tem certeza que deseja excluir esta rotina?");
-    if (!confirmar) return;
+    const result = await Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você não poderá reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar'
+    });
 
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/rotinas/${id}/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`${BACKEND_BASE_URL}/rotinas/${id}/`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Erro ao excluir rotina: ${response.status} - ${errorText}`);
         }
-      });
-
-      if (!response.ok) {
-        // Se a resposta não for bem-sucedida, mostrar o erro
-        const errorText = await response.text();
-        throw new Error(`Erro ao excluir rotina: ${response.status} - ${errorText}`);
+        
+        setRotinas(rotinas.filter((r) => r.id !== id));
+        
+        Swal.fire(
+          'Excluída!',
+          'Sua rotina foi excluída com sucesso.',
+          'success'
+        );
+      
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `Erro ao excluir rotina: ${err.message}`,
+        });
       }
-      // Se a exclusão for bem-sucedida, removemos a rotina da lista local
-      setRotinas(rotinas.filter((r) => r.id !== id));
-      alert("Rotina excluída com sucesso!");
-    
-    } catch (err) {
-      console.error(err);
-      alert(`Erro ao excluir rotina: ${err.message}`);
     }
   }
 

@@ -8,13 +8,16 @@ export default function MontarRotina() {
   const [nomeDaRotina, setNomeDaRotina] = useState("");
   const [modal, setModal] = useState({ isVisible: false, message: "", type: null, tarefaId: null });
   
+  // CORREÇÃO: URL base do backend publicado
+  const BACKEND_BASE_URL = "https://projeto-rotina-visual-p1cg.vercel.app";
+  
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchTarefas() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/tarefas/", {
+        const response = await fetch(`${BACKEND_BASE_URL}/tarefas/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -29,7 +32,7 @@ export default function MontarRotina() {
     fetchTarefas();
   }, [token]);
 
-  // Função para abrir o modal
+  // Função abrir o modal
   const abrirModal = (message, type, tarefaId = null) => {
     setModal({
       isVisible: true,
@@ -39,18 +42,18 @@ export default function MontarRotina() {
     });
   };
 
-  // Abrir modal de confirmação de exclusão
+  // Abrir modal confirmação de exclusão
   const handleExcluirClick = (tarefaId) => {
     abrirModal("Tem certeza que deseja excluir esta tarefa?", "confirmacao", tarefaId);
   };
 
-  // Confirmar exclusão de uma tarefa específica
+  // Confirmar exclusão de tarefa específica
   const confirmarExclusao = async () => {
     if (!modal.tarefaId) return;
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/tarefas/${modal.tarefaId}`,
+        `${BACKEND_BASE_URL}/tarefas/${modal.tarefaId}`,
         {
           method: "DELETE",
           headers: {
@@ -62,28 +65,24 @@ export default function MontarRotina() {
         throw new Error("Erro ao excluir tarefa.");
       }
       
-      // Se exclusão bem-sucedida, atualiza o estado
       setTarefasDisponiveis((prevTarefas) => 
         prevTarefas.filter((t) => t.id !== modal.tarefaId)
       );
       setTarefasSelecionadas((prevTarefas) => 
         prevTarefas.filter((t) => t.id !== modal.tarefaId)
       );
-            
+              
       abrirModal("Tarefa excluída com sucesso!", "sucesso");
 
       setTimeout(() => {
-        // Fecha o modal e navega de volta para a tela principal
         setModal({ isVisible: false, message: "", type: null, tarefaId: null });
         navigate("/montar-rotina");
       }, 2000);
       
     } catch (err) {
       console.error("Erro ao excluir tarefa:", err);
-      // Exibe mensagem de erro
       abrirModal(err.message || "Erro ao excluir tarefa.", "erro");
       
-      // Lógica de fechamento do modal em caso de erro
       setTimeout(() => {
         setModal({ isVisible: false, message: "", type: null, tarefaId: null });
       }, 3000);
@@ -119,7 +118,7 @@ export default function MontarRotina() {
       return;
     }
 
-    const response = await fetch("http://127.0.0.1:8000/rotinas/", {
+    const response = await fetch(`${BACKEND_BASE_URL}/rotinas/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -248,7 +247,7 @@ export default function MontarRotina() {
         </button>
       </div>
         
-      {/* --- modal único para todas as situações. --- */}
+      {/* --- modal único p todas situações. --- */}
       {modal.isVisible && (
         <div className="modal-overlay">
           {/* Modal de gerenciamento de tarefas */}

@@ -36,8 +36,7 @@ export default function CriarTarefa() {
     setAltText(imagemSelecionada.alt_text);
   };
   
-  // UseEffect para monitorar se o estado de imagemUrl está sendo atualizado.
-  // Quando uma imagem é selecionada, você verá este log.
+
   useEffect(() => {
     if(imagemUrl) {
       console.log('O estado de imagemUrl foi atualizado para:', imagemUrl);
@@ -45,12 +44,15 @@ export default function CriarTarefa() {
     }
   }, [imagemUrl, altText]);
 
-
   async function salvarTarefa(e) {
     e.preventDefault();
 
     if (!nome || !imagemUrl || !estrelas) {
-      alert("Por favor, preencha todos os campos.");
+      // Usando uma modal customizada em vez de alert()
+      const modal = document.getElementById('modal-erro');
+      const modalText = document.getElementById('modal-erro-text');
+      modalText.textContent = "Por favor, preencha todos os campos.";
+      modal.style.display = "block";
       return;
     }
     
@@ -76,17 +78,46 @@ export default function CriarTarefa() {
         throw new Error("Erro ao salvar a tarefa.");
       }
 
-      alert("Tarefa salva com sucesso!");
-      navigate("/rotina");
+      const modal = document.getElementById('modal-sucesso');
+      const modalText = document.getElementById('modal-sucesso-text');
+      modalText.textContent = "Tarefa salva com sucesso!";
+      modal.style.display = "block";
+      setTimeout(() => {
+        modal.style.display = "none";
+        navigate("/rotina");
+      }, 2000);
 
     } catch (error) {
       console.error("Erro:", error);
-      alert(error.message);
+      const modal = document.getElementById('modal-erro');
+      const modalText = document.getElementById('modal-erro-text');
+      modalText.textContent = error.message;
+      modal.style.display = "block";
     }
   }
 
+  const fecharModal = (id) => {
+    document.getElementById(id).style.display = "none";
+  };
+
   return (
     <div className="pagina-criar-tarefa">
+      {/* Modal de sucesso */}
+      <div id="modal-sucesso" className="modal">
+        <div className="modal-content">
+          <span className="close-button" onClick={() => fecharModal('modal-sucesso')}>&times;</span>
+          <p id="modal-sucesso-text"></p>
+        </div>
+      </div>
+
+      {/* Modal de erro */}
+      <div id="modal-erro" className="modal">
+        <div className="modal-content">
+          <span className="close-button" onClick={() => fecharModal('modal-erro')}>&times;</span>
+          <p id="modal-erro-text"></p>
+        </div>
+      </div>
+      
       <div className="cartao-criar-tarefa">
         <h1 className="titulo-criar-tarefa">Criar nova tarefa</h1>
         
@@ -105,7 +136,7 @@ export default function CriarTarefa() {
             />
           </div>
 
-          {/* Seleção de imagens */}
+          {/* Seleção imagens */}
           <div className="form-group">
             <label className="label-criar-tarefa">Selecione uma imagem:</label>
             <div className="lista-imagens-sugeridas">
@@ -121,7 +152,7 @@ export default function CriarTarefa() {
             </div>
           </div>
 
-          {/* Seleção de estrelas */}
+          {/* Seleção estrelas */}
           <div className="form-group">
             <label className="label-criar-tarefa">Selecione quantas estrelas esta tarefa vale:</label>
             <div className="lista-estrelas">
