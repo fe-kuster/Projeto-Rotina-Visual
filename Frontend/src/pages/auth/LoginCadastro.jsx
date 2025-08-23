@@ -26,7 +26,7 @@ export default function LoginCadastro() {
         formData.append("username", email);
         formData.append("password", senha);
 
-        const response = await fetch("https://projeto-rotina-visual-p1cg.vercel.app", {
+        const response = await fetch("https://projeto-rotina-visual-p1cg.vercel.app/token", {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -49,7 +49,7 @@ export default function LoginCadastro() {
       }
     } else {
       try {
-        const response = await fetch("http://127.0.0.1:8000/usuarios/", {
+        const response = await fetch("https://projeto-rotina-visual-p1cg.vercel.app/usuarios/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
