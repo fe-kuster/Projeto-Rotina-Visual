@@ -26,7 +26,7 @@ export default function LoginCadastro() {
         formData.append("username", email);
         formData.append("password", senha);
 
-        const response = await fetch("http://127.0.0.1:8000/token", {
+        const response = await fetch("https://projeto-rotina-visual-p1cg.vercel.app", {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
