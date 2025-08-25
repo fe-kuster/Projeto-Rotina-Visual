@@ -16,7 +16,7 @@ def adicionar_tarefa_rotina(
     # Confere se a tarefa existe e se pertence ao usuário OU é padrão
     tarefa = db.query(Tarefa).filter(
         Tarefa.id == relacao.tarefa_id,
-        (Tarefa.usuario_id == user_id) | (Tarefa.is_padrao == True)
+        (Tarefa.usuario_id == user_id) | (Tarefa.is_padrao == 1)
     ).first()
 
     if not tarefa:
