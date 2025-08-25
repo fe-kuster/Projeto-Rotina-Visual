@@ -29,18 +29,28 @@ export default function VisualizarRotina() {
 
         const rotinaData = await rotinaResp.json();
         
+        console.log("Resposta da API:", rotinaData);
+        console.log("Tarefas recebidas:", rotinaData.tarefas);
+
         setNomeDaRotina(rotinaData.nome);
-        setTarefas(rotinaData.tarefas);
+        setTarefas(rotinaData.tarefas || []); 
       } catch (err) {
-        console.error(err);
+        console.error("Erro na requisição da rotina:", err);
         setErro(err.message);
       } finally {
         setCarregando(false);
       }
     }
 
-    fetchRotina();
-  }, [id, token, BACKEND_BASE_URL]); // Adicionei BACKEND_BASE_URL como dependência
+    if (token && id) {
+      fetchRotina();
+    } else {
+      setErro("Token ou ID da rotina não encontrados.");
+      setCarregando(false);
+      navigate("/rotina");
+    }
+  }, [id, token, navigate]);
+
 
   function toggleConclusao(id) {
     setConcluidas((prev) =>
@@ -68,43 +78,47 @@ export default function VisualizarRotina() {
       </Link>
       <h1 className="titulo-rotina">{nomeDaRotina}</h1>
       <div className="lista-tarefas-horizontal">
-        {tarefas.map((tarefa) => (
-          <div
-            key={tarefa.id}
-            className={`cartao-tarefa ${
-              concluidas.includes(tarefa.id) ? 'cartao-tarefa-concluida' : ''
-            }`}
-          >
-            <div className="imagem-container">
-              {tarefa.imagem_url ? (
-                <img
-                  src={tarefa.imagem_url}
-                  alt={tarefa.alt_text}
-                  className="imagem-tarefa"
-                  loading= "lazy"
-                />
-              ) : null}
+        {tarefas.length > 0 ? (
+          tarefas.map((tarefa) => (
+            <div
+              key={tarefa.id}
+              className={`cartao-tarefa ${
+                concluidas.includes(tarefa.id) ? 'cartao-tarefa-concluida' : ''
+              }`}
+            >
+              <div className="imagem-container">
+                {tarefa.imagem_url ? (
+                  <img
+                    src={tarefa.imagem_url}
+                    alt={tarefa.alt_text}
+                    className="imagem-tarefa"
+                    loading= "lazy"
+                  />
+                ) : null}
+              </div>
+              <p className="nome-tarefa">{tarefa.nome}</p>
+              <div className="container-estrelas-botao">
+                <p className="estrelas-tarefa">{tarefa.estrelas} ⭐</p>
+                <button
+                  onClick={() => toggleConclusao(tarefa.id)}
+                  className={`botao-conclusao ${
+                    concluidas.includes(tarefa.id)
+                      ? 'botao-conclusao-ativo'
+                      : ''
+                  }`}
+                >
+                  {concluidas.includes(tarefa.id) ? (
+                    <>✓ Feito <span className="emoji-joinha">👍</span></>
+                  ) : (
+                    <>Fazer <span className="emoji-joinha">👍</span></>
+                  )}
+                </button>
+              </div>
             </div>
-            <p className="nome-tarefa">{tarefa.nome}</p>
-            <div className="container-estrelas-botao">
-              <p className="estrelas-tarefa">{tarefa.estrelas} ⭐</p>
-              <button
-                onClick={() => toggleConclusao(tarefa.id)}
-                className={`botao-conclusao ${
-                  concluidas.includes(tarefa.id)
-                    ? 'botao-conclusao-ativo'
-                    : ''
-                }`}
-              >
-                {concluidas.includes(tarefa.id) ? (
-                  <>✓ Feito <span className="emoji-joinha">👍</span></>
-                ) : (
-                  <>Fazer <span className="emoji-joinha">👍</span></>
-                )}
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="p-4 text-gray-500">Nenhuma tarefa encontrada para esta rotina. Verifique se a API está retornando os dados corretamente.</p>
+        )}
       </div>
         
       <div className="container-info-rotina">
