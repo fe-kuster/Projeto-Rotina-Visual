@@ -39,14 +39,14 @@ def listar_rotinas(db: Session = Depends(get_db), user_id: int = Depends(get_cur
 def obter_rotina(rotina_id: int, db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
     rotina = (
         db.query(Rotina)
-        .options(joinedload(Rotina.tarefas).joinedload(TarefaRotina.tarefa))
+        .options(joinedload(Rotina.tarefas_rotina).joinedload(TarefaRotina.tarefa))
         .filter(Rotina.id == rotina_id, Rotina.usuario_id == user_id)
         .first()
     )
     if not rotina:
         raise HTTPException(status_code=404, detail="Rotina não encontrada")
     
-    rotina.tarefas = [tr.tarefa for tr in sorted(rotina.tarefas, key=lambda x: x.ordem)]
+    rotina.tarefas = [tr.tarefa for tr in rotina.tarefas_rotina]
     return rotina
 
 @router.patch("/{rotina_id}", response_model=RotinaResponse)
