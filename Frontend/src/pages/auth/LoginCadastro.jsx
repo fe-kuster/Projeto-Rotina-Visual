@@ -77,7 +77,10 @@ export default function LoginCadastro() {
             nome_responsavel: nomeResponsavel,
             email_responsavel: email,
             senha,
-          }),if (!response.ok) {
+          }),
+        });
+
+        if (!response.ok) { // #ALTERAÇÃO: Corrigido o erro de sintaxe
           throw new Error("Erro no cadastro");
         }
 
