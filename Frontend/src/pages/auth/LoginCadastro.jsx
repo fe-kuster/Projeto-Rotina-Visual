@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
+// teste de deploy p atualizar vercel.
+
 export default function LoginCadastro() {
   const [modo, setModo] = useState('login'); // 'login' ou 'cadastro'
   const [email, setEmail] = useState('');
