@@ -9,6 +9,12 @@ export default function LoginCadastro() {
   const [senha, setSenha] = useState('');
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [nomeResponsavel, setNomeResponsavel] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [messageBoxVisible, setMessageBoxVisible] = useState(false);
+  const [messageBoxText, setMessageBoxText] = useState('');
+
   const navigate = useNavigate();
 
   const alternarModo = () => {
@@ -17,6 +23,16 @@ export default function LoginCadastro() {
     setSenha('');
     setNomeUsuario('');
     setNomeResponsavel('');
+  };
+
+  const showMessageBox = (message) => {
+    setMessageBoxText(message);
+    setMessageBoxVisible(true);
+  };
+
+  const closeMessageBox = () => {
+    setMessageBoxVisible(false);
+    setMessageBoxText('');
   };
 
   const handleSubmit = async (e) => {
@@ -47,7 +63,7 @@ export default function LoginCadastro() {
         navigate("/rotina");
       } catch (err) {
         console.error(err);
-        alert("Erro ao fazer login.");
+        showMessageBox("Erro ao fazer login. Verifique seu email e senha.");
       }
     } else {
       try {
@@ -61,20 +77,22 @@ export default function LoginCadastro() {
             nome_responsavel: nomeResponsavel,
             email_responsavel: email,
             senha,
-          }),
-        });
-
-        if (!response.ok) {
+          }),if (!response.ok) {
           throw new Error("Erro no cadastro");
         }
 
-        alert("Cadastro realizado com sucesso!");
+        showMessageBox("Cadastro realizado com sucesso!");
         setModo("login");
       } catch (err) {
         console.error(err);
-        alert("Erro ao cadastrar.");
+        showMessageBox("Erro ao cadastrar. Verifique os dados e tente novamente.");
       }
     }
+  };
+
+  // #Função visibilidade da senha
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -123,13 +141,23 @@ export default function LoginCadastro() {
 
           <div className="form-group">
             <label className="label-login">Senha</label>
-            <input
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              className="input-login"
-              required
-            />
+            <div className="password-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                className="input-login"
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={toggleShowPassword}
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
 
           <button
@@ -151,6 +179,14 @@ export default function LoginCadastro() {
           </button>
         </div>
       </div>
+      {messageBoxVisible && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p className="modal-message">{messageBoxText}</p>
+            <button className="modal-close-btn" onClick={closeMessageBox}>Fechar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
