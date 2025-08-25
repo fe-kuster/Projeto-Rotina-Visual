@@ -10,19 +10,5 @@
       "src": "/(.*)",
       "dest": "/main.py"
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/rotinas(.*)",
-      "destination": "/api/rotinas"
-    },
-    {
-      "source": "/token(.*)",
-      "destination": "/api/token"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
   ]
 }
