@@ -54,13 +54,13 @@ def criar_tarefa(tarefa: schemas.TarefaCreate,
 @router.get("/tarefas/", response_model=list[schemas.TarefaResponse])
 def listar_tarefas(db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
     tarefas = db.query(Tarefa).filter(
-        (Tarefa.usuario_id == user_id) | (Tarefa.estrelas >= 1)
+        or_(Tarefa.usuario_id == user_id, Tarefa.usuario_id == 1)
     ).all()
     return tarefas
 
 @router.get("/tarefas/{tarefa_id}", response_model=schemas.TarefaResponse)
 def buscar_tarefa(tarefa_id: int, db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
-    tarefa = db.query(Tarefa).filter(Tarefa.id == tarefa_id, Tarefa.usuario_id == user_id).first()
+    tarefa = db.query(Tarefa).filter(Tarefa.id == tarefa_id, or_(Tarefa.usuario_id == user_id, Tarefa.usuario_id == 1)).first()
     if not tarefa:
         raise HTTPException(status_code=404, detail="Tarefa não encontrada")
     return tarefa
