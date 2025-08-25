@@ -11,14 +11,14 @@ router = APIRouter(prefix="/rotinas", tags=["Rotinas"])
 
 @router.post("/", response_model=RotinaResponse)
 def criar_rotina(rotina_data: dict, db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
-    #Cria uma nova rotina e associa as tarefas a ela.
+    """Cria uma nova rotina e associa as tarefas a ela."""
     nova_rotina = Rotina(nome=rotina_data["nome"], usuario_id=user_id)
     db.add(nova_rotina)
     db.commit()
     db.refresh(nova_rotina)
 
     for ordem, tarefa_id in enumerate(rotina_data["tarefas"]):
-        relacao = TarefaRotina(rotina_id=nova_rotina.id, tarefa_id=tarefa_id, ordem=ordem)
+        relacao = TarefaRotina(rotina_id=nova_rotina.id, tarefa_id=tarefa_id, ordem=ordem, usuario_id=user_id)
         db.add(relacao)
 
     db.commit()
@@ -51,6 +51,7 @@ def obter_rotina(rotina_id: int, db: Session = Depends(get_db), user_id: int = D
 
 @router.patch("/{rotina_id}", response_model=RotinaResponse)
 def atualizar_rotina(rotina_id: int, rotina_data: schemas.RotinaUpdate, db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)):
+    """Atualiza uma rotina existente."""
     rotina = db.query(Rotina).filter(Rotina.id == rotina_id, Rotina.usuario_id == user_id).first()
     if not rotina:
         raise HTTPException(status_code=404, detail="Rotina não encontrada")
@@ -60,7 +61,7 @@ def atualizar_rotina(rotina_id: int, rotina_data: schemas.RotinaUpdate, db: Sess
     db.query(TarefaRotina).filter(TarefaRotina.rotina_id == rotina_id).delete()
 
     for ordem, tarefa_id in enumerate(rotina_data.tarefas):
-        relacao = TarefaRotina(rotina_id=rotina_id, tarefa_id=tarefa_id, ordem=ordem)
+        relacao = TarefaRotina(rotina_id=rotina_id, tarefa_id=tarefa_id, ordem=ordem, usuario_id=user_id)
         db.add(relacao)
 
     db.commit()
