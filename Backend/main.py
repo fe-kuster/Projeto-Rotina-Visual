@@ -37,7 +37,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 origins = [
     "http://localhost:3000",
     "https://projeto-rotina-visual.vercel.app",
-    "https://projeto-rotina-visual-p1cg.vercel.app"
+    "https://projeto-rotina-visual-p1cg.vercel.app",
+    "https://*.vercel.app"
 ]
 
 app.add_middleware(
