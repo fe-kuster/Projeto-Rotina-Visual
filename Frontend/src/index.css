@@ -398,6 +398,7 @@ button:focus-visible {
     font-weight: 500;
     font-size: 1.125rem;
     margin-bottom: 0.5rem;
+    padding: 0.5rem 1.5rem;
 }
 
 @media (min-width: 640px) {
@@ -797,6 +798,8 @@ button:focus-visible {
     cursor: pointer;
     transition: background-color 0.2s;
     margin-top: 1rem;
+    display: block;
+    width: 100%;
 }
 
 .botao-salvar-rotina:hover {
