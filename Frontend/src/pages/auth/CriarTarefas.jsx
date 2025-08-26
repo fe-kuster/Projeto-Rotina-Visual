@@ -29,6 +29,12 @@ export default function CriarTarefa() {
     { id: 'img17', url: 'https://i.imgur.com/Axs5U9E.jpeg', alt_text: 'Menina feliz na hora de tomar vacina, braço da enfermeira segura e aplica a injeção no braço da menina. Ao lado dela, o menino já tomou sua vacina e está orgulhoso com seu curativo no braço.'},
     { id: 'img18', url: 'https://i.imgur.com/O0xXP70.jpeg', alt_text: 'Crianças felizes com seus lápis e cadernos, fazendo a lição de casa.'},
     { id: 'img19', url: 'https://i.imgur.com/1JrB1Ao.jpeg', alt_text: 'Crianças no consultório médico felizes e sem medo enquanto a doutora escuta o coração e conversa com as crianças.'},
+    { id: 'img24', url: 'https://i.imgur.com/ZctxlV1.jpeg', alt_text: 'Menina feliz segura um copinho de xarope, a mamãe está com ela segurando o vidro de xarope, pois é hora de tomar remédio'},
+    { id: 'img25', url: 'https://i.imgur.com/gIsqBA0.jpeg', alt_text: 'Fraldinha sorrindo feliz e falando que é hora de trocar a fraldinha'},
+    { id: 'img26', url: 'https://i.imgur.com/Z8Gvyjp.jpeg', alt_text: 'Pia do banheiro com toalha, escova e pasta de dente e sabonete, tudo prontinho para hora da higiene.'},
+    { id: 'img27', url: 'https://i.imgur.com/B27hp5Q.jpeg', alt_text: 'Criança feliz de mochilinha, ao fundo a vovó chegou para buscar você para visitá-la.'},
+    { id: 'img28', url: 'https://i.imgur.com/PYBqJDv.jpeg', alt_text: 'Criança feliz, ao fundo papai chegou para buscar você.'},
+    { id: 'img29', url: 'https://i.imgur.com/fh0pRcO.jpeg', alt_text: 'Criança feliz no atendimento especializado da sua escola aprender com a sua profe.'},
   ];
 
   const handleImagemSelect = (imagemSelecionada) => {
