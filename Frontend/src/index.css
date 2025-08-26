@@ -322,6 +322,20 @@ button:focus-visible {
     text-decoration: underline;
 }
 
+.password-container {
+  position: relative;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 /* --- FIm dos Estilos para EditarRotina.js --- */
 
 /* --- Estilos para a página "Suas Rotinas" --- */
@@ -396,6 +410,8 @@ button:focus-visible {
     display: flex;
     gap: 0.5rem;
 }
+
+
 
 /* Estilos para o fundo semi-transparente do modal */
 .modal-overlay {
