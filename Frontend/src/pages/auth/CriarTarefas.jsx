@@ -119,6 +119,9 @@ export default function CriarTarefa() {
       </div>
       
       <div className="cartao-criar-tarefa">
+        <button onClick={() => navigate(-1)} className="botao-voltar">
+          Voltar
+        </button>
         <h1 className="titulo-criar-tarefa">Criar nova tarefa</h1>
         
         <form onSubmit={salvarTarefa} className="form-criar-tarefa">

@@ -403,7 +403,8 @@ button:focus-visible {
 
 @media (min-width: 640px) {
     .nome-rotina {
-        margin-bottom: 0;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 1.5rem;
     }
 }
 
@@ -519,10 +520,12 @@ button:focus-visible {
 .cartao-montar-rotina {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 1.5rem;
+    padding-right: 1.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 64rem;
+    gap: 1.5rem;
 }
 
 .titulo-montar-rotina {
@@ -538,8 +541,10 @@ button:focus-visible {
 
 .label-montar-rotina {
     display: block;
+    width: 100%;
     margin-bottom: 0.25rem;
     font-weight: 500;
+    padding: 1.5rem;
 }
 
 .input-montar-rotina {
@@ -587,6 +592,7 @@ button:focus-visible {
 
 .botao-criar-tarefa {
     background-color: white;
+    text-align: center;
     color: black;
     border: 1px solid black;
     padding: 0.5rem 1rem;
@@ -608,7 +614,7 @@ button:focus-visible {
     padding: 0.5rem 1rem;
     border-radius: 0.75rem;
     cursor: pointer;
-     transition: background-color 0.2s;
+    transition: background-color 0.2s;
 }
 
 .botao-gerenciar-tarefas:hover {
