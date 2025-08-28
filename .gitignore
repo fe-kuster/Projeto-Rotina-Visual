@@ -1,8 +1,16 @@
+.DS_Store
+Thumbs.db
+
 # Arquivos de ambiente e credenciais
 .env
+.env.*
+*.env
+*.secret
 
 # Ambiente Virtual Python
 venv/
+.venv/
+env/
 __pycache__/
 *.pyc
 *.pyo
@@ -17,14 +25,19 @@ __pycache__/
 *.tmp
 
 # Dependências do Frontend Node.js/npm
-frontend/node_modules/
+node_modules/
+**/node_modules/
+dist/
+build/
 frontend/dist/
 frontend/build/
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
-frontend/.env.local # Se o frontend também usar arquivos .env específicos
 
 *.iml
 .coverage
 htmlcov/
+
+.vercel/
+.cache/
