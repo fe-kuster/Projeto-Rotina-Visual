@@ -10,8 +10,11 @@ export default function EditarRotina() {
   const [erro, setErro] = useState(null);
   const [modal, setModal] = useState({ isVisible: false, message: "", type: null, tarefaId: null });
   
-  // URL base do backend publicado na Vercel
-  const BACKEND_BASE_URL = "https://projeto-rotina-visual-p1cg.vercel.app";
+    // ALTERAÇÃO: para definir a URL do backend com base no ambiente.
+  const BACKEND_BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://projeto-rotina-visual-p1cg.vercel.app"
+      : "http://localhost:8000";
 
   const { id } = useParams();
   const navigate = useNavigate();

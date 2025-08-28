@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
-// teste de deploy p atualizar vercel.
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginCadastro() {
   const [modo, setModo] = useState('login'); // 'login' ou 'cadastro'
@@ -44,10 +44,11 @@ export default function LoginCadastro() {
         formData.append("username", email);
         formData.append("password", senha);
 
-        const response = await fetch("https://projeto-rotina-visual-p1cg.vercel.app/token", {
+        const response = await fetch(`${API_URL}/token`, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
           },
           body: formData.toString(),
         });
@@ -67,7 +68,7 @@ export default function LoginCadastro() {
       }
     } else {
       try {
-        const response = await fetch("https://projeto-rotina-visual-p1cg.vercel.app/usuarios/", {
+        const response = await fetch(`${API_URL}/usuarios/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

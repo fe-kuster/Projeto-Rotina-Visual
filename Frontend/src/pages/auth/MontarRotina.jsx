@@ -8,8 +8,11 @@ export default function MontarRotina() {
   const [nomeDaRotina, setNomeDaRotina] = useState("");
   const [modal, setModal] = useState({ isVisible: false, message: "", type: null, tarefaId: null });
   
-  // CORREÇÃO: URL base do backend publicado
-  const BACKEND_BASE_URL = "https://projeto-rotina-visual-p1cg.vercel.app";
+    // ALTERAÇÃO: para definir a URL do backend com base no ambiente.
+  const BACKEND_BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://projeto-rotina-visual-p1cg.vercel.app"
+      : "http://localhost:8000";
   
   const token = localStorage.getItem("token");
   const navigate = useNavigate();

@@ -2,12 +2,15 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import load_dotenv
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+load_dotenv()
 
-if DATABASE_URL:
-    SQLALCHEMY_DATABASE_URL = DATABASE_URL
+if os.getenv("MYSQL_DATABASE_URL"):
+    SQLALCHEMY_DATABASE_URL = os.getenv("MYSQL_DATABASE_URL")
 else:
+    SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+if not SQLALCHEMY_DATABASE_URL:
     SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):

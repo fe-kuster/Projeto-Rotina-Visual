@@ -8,7 +8,11 @@ export default function SuasRotinas() {
   const [erro, setErro] = useState(null);
   const navigate = useNavigate();
 
-  const BACKEND_BASE_URL = "https://projeto-rotina-visual-p1cg.vercel.app";
+// ALTERAÇÃO: para definir a URL do backend com base no ambiente.
+  const BACKEND_BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://projeto-rotina-visual-p1cg.vercel.app"
+      : "http://localhost:8000";
 
   const token = localStorage.getItem('token');
 

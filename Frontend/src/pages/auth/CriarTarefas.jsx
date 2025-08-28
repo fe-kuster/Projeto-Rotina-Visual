@@ -9,6 +9,12 @@ export default function CriarTarefa() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
+      // ALTERAÇÃO: para definir a URL do backend com base no ambiente.
+  const BACKEND_BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://projeto-rotina-visual-p1cg.vercel.app"
+      : "http://localhost:8000";
+
   const imagensSugeridas = [
     { id: 'img1', url: 'https://i.imgur.com/azbvLj2.jpeg', alt_text: 'Menina e menino felizes, sentados à mesa, tomando café da manhã composto por uma caneca, uma fatia de pão e uma laranja.'},
     { id: 'img2', url: 'https://i.imgur.com/2x1HsTE.jpeg', alt_text: 'Menina e menino sentados à mesa, almoçando bem felizes.'},
@@ -71,7 +77,7 @@ export default function CriarTarefa() {
     console.log('Dados enviados para a API:', payload);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/tarefas/", {
+      const response = await fetch(`${BACKEND_BASE_URL}/tarefas/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
