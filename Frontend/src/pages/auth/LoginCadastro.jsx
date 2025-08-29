@@ -182,7 +182,13 @@ export default function LoginCadastro() {
               : 'Já tem conta? Fazer login'}
           </button>
         </div>
+        <div className="feedback-contato-container">
+          <p className="feedback-texto">
+            Contate-nos por e-mail em <a href="mailto:fernandapkuster@gmail.com" className="feedback-email">fernandapkuster@gmail.com</a> com seus comentários, avaliação e/ou sugestões.
+          </p>
+        </div>
       </div>
+      
       {messageBoxVisible && (
         <div className="modal-overlay">
           <div className="modal-content">
