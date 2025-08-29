@@ -1,12 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 
+// Componente para renderizar o céu com a lua e estrelas
+const CeuPreview = ({ totalEstrelas }) => {
+  const [estrelas, setEstrelas] = useState([]);
+
+  useEffect(() => {
+    // Função p gerar estrelas aleatoriamente
+    const gerarEstrelas = () => {
+      const novasEstrelas = [];
+      // Só gera estrelas se o total for maior que 0
+      if (totalEstrelas > 0) {
+        for (let i = 0; i < totalEstrelas; i++) {
+          const x = Math.random() * 95;
+          const y = Math.random() * 95;
+          const tamanho = Math.random() * (2 - 0.5) + 0.5;
+          const delay = Math.random() * 3;
+          novasEstrelas.push({ x, y, tamanho, delay });
+        }
+      }
+      setEstrelas(novasEstrelas);
+    };
+
+    gerarEstrelas();
+  }, [totalEstrelas]);
+
+  return (
+    <div className="ceu-preview-container">
+      <div className="estrelas-container">
+        {estrelas.map((estrela, index) => (
+          <span
+            key={index}
+            className="estrela-simulada"
+            style={{
+              left: `${estrela.x}%`,
+              top: `${estrela.y}%`,
+              fontSize: `${estrela.tamanho}rem`,
+              animationDelay: `${estrela.delay}s`,
+            }}
+          >
+            ⭐
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function VisualizarRotina() {
-  const { id } = useParams(); 
-  const token = localStorage.getItem("token"); 
+  const { id } = useParams();
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  
-    // ALTERAÇÃO: para definir a URL do backend com base no ambiente.
+
   const BACKEND_BASE_URL =
     process.env.NODE_ENV === "production"
       ? "https://projeto-rotina-visual-p1cg.vercel.app"
@@ -18,7 +63,7 @@ export default function VisualizarRotina() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
   
-  const [avisoModal, setAvisoModal] = useState({ isVisible: false, message: "" });
+  const [isCeuModalVisible, setIsCeuModalVisible] = useState(false);
 
   useEffect(() => {
     async function fetchRotina() {
@@ -28,7 +73,7 @@ export default function VisualizarRotina() {
         });
 
         if (!rotinaResp.ok) {
-          throw new Error("Erro ao carregar rotina. Verifique a conexão com a API.");
+          throw new Error("Sua rotina está vazia, volte e clique em editar para adicionar tarefas.");
         }
 
         const rotinaData = await rotinaResp.json();
@@ -39,22 +84,21 @@ export default function VisualizarRotina() {
         setNomeDaRotina(rotinaData.nome);
         setTarefas(rotinaData.tarefas || []); 
       } catch (err) {
-        console.error("Erro na requisição da rotina:", err);
+        console.error("Erro na requisi\u00e7\u00e3o da rotina:", err);
         setErro(err.message);
       } finally {
-        setCarregando(false);
+          setCarregando(false);
       }
     }
 
     if (token && id) {
       fetchRotina();
     } else {
-      setErro("Token ou ID da rotina não encontrados.");
+      setErro("Token ou ID da rotina n\u00e3o encontrados.");
       setCarregando(false);
       navigate("/rotina");
     }
   }, [id, token, navigate]);
-
 
   function toggleConclusao(id) {
     setConcluidas((prev) =>
@@ -68,12 +112,11 @@ export default function VisualizarRotina() {
     return !isNaN(estrelas) ? soma + estrelas : soma;
   }, 0);
 
-  const abrirAviso = (message) => {
-    setAvisoModal({ isVisible: true, message });
-  };
+  const abrirCeuModal = () => setIsCeuModalVisible(true);
+  const fecharCeuModal = () => setIsCeuModalVisible(false);
   
-  if (carregando) return <p className="p-6">Carregando rotina...</p>;
-  if (erro) return <p className="p-6 text-red-600">Erro: {erro}</p>;
+  if (carregando) return <p className="loading-text">Carregando rotina...</p>;
+  if (erro) return <p className="error-text">Erro: {erro}</p>;
 
   return (
     <div className="pagina-container">
@@ -96,7 +139,7 @@ export default function VisualizarRotina() {
                     src={tarefa.imagem_url}
                     alt={tarefa.alt_text}
                     className="imagem-tarefa"
-                    loading= "lazy"
+                    loading="lazy"
                   />
                 ) : null}
               </div>
@@ -121,31 +164,53 @@ export default function VisualizarRotina() {
             </div>
           ))
         ) : (
-          <p className="p-4 text-gray-500">Nenhuma tarefa encontrada para esta rotina. Verifique se a API está retornando os dados corretamente.</p>
+          <p className="p-4 text-gray-500">Nenhuma tarefa encontrada para esta rotina. Edite sua rotina para adicionar tarefas.</p>
         )}
       </div>
-        
-      <div className="container-info-rotina">
+      
+      {/* Container pai c flexbox p organizar o céu */}
+      <div className="grid-container-ceu-info">
+    <div className="info-esquerda">
         <p className="texto-estrelas-acumuladas">
-          Estrelas acumuladas: <span className="estrelas-acumuladas-valor">{estrelasGanhas}</span> ⭐
+            Estrelas acumuladas: <span className="estrelas-acumuladas-valor">{estrelasGanhas}</span> ⭐
         </p>
-        <button
-          onClick={() => abrirAviso("Preview do céu em breve! ☁️")}
-          className="botao-ver-ceu"
-        >
-          Ver meu céu
-        </button>
-      </div>
+    </div>
 
-      {/* Modal de aviso para feedback ao usuário */}
-      {avisoModal.isVisible && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <p className="modal-mensagem">{avisoModal.message}</p>
-            <div className="modal-confirmacao-botoes">
-              <button onClick={() => setAvisoModal({ isVisible: false, message: "" })} className="botao-ok-confirmacao">
-                Ok
-              </button>
+    <CeuPreview totalEstrelas={estrelasGanhas} />
+
+    <div className="info-direita">
+        <button
+            onClick={abrirCeuModal}
+            className="botao-ver-ceu"
+        >
+            Ver meu céuzinho
+        </button>
+    </div>
+</div>
+
+      {/* Modal do céu que aparecerá ao clicar no botão */}
+      {isCeuModalVisible && (
+        <div className="ceu-modal-overlay">
+          <div className="ceu-modal-container">
+            <button onClick={fecharCeuModal} className="botao-fechar-ceu">
+              &times;
+            </button>
+            <div className="ceu-estrelado-modal">
+              {/* Gera estrelas para o modal */}
+              {Array.from({ length: estrelasGanhas }).map((_, index) => (
+                <span
+                  key={index}
+                  className="estrela-modal"
+                  style={{
+                    left: `${Math.random() * 95}%`,
+                    top: `${Math.random() * 95}%`,
+                    fontSize: `${Math.random() * (2 - 0.5) + 0.5}rem`,
+                    animationDelay: `${Math.random() * 3}s`,
+                  }}
+                >
+                  ⭐
+                </span>
+              ))}
             </div>
           </div>
         </div>
