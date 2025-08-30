@@ -9,6 +9,10 @@ export default function CriarTarefa() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
+  const [showModalSucesso, setShowModalSucesso] = useState(false);
+  const [showModalErro, setShowModalErro] = useState(false);
+  const [modalTexto, setModalTexto] = useState('');
+
       // ALTERAÇÃO: para definir a URL do backend com base no ambiente.
   const BACKEND_BASE_URL =
     process.env.NODE_ENV === "production"
@@ -60,11 +64,8 @@ export default function CriarTarefa() {
     e.preventDefault();
 
     if (!nome || !imagemUrl || !estrelas) {
-      // Usando uma modal customizada em vez de alert()
-      const modal = document.getElementById('modal-erro');
-      const modalText = document.getElementById('modal-erro-text');
-      modalText.textContent = "Por favor, preencha todos os campos.";
-      modal.style.display = "block";
+      setModalTexto("Por favor, preencha todos os campos.");
+      setShowModalErro(true);
       return;
     }
     
@@ -74,7 +75,6 @@ export default function CriarTarefa() {
       estrelas: estrelas,
       alt_text: altText
     };
-    console.log('Dados enviados para a API:', payload);
 
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/tarefas/`, {
@@ -90,45 +90,49 @@ export default function CriarTarefa() {
         throw new Error("Erro ao salvar a tarefa.");
       }
 
-      const modal = document.getElementById('modal-sucesso');
-      const modalText = document.getElementById('modal-sucesso-text');
-      modalText.textContent = "Tarefa salva com sucesso!";
-      modal.style.display = "block";
+      setModalTexto("Tarefa salva com sucesso!");
+      setShowModalSucesso(true);
+
       setTimeout(() => {
-        modal.style.display = "none";
-        navigate("/rotina");
+        setShowModalSucesso(false);
+        navigate(-1);
       }, 2000);
 
     } catch (error) {
       console.error("Erro:", error);
-      const modal = document.getElementById('modal-erro');
-      const modalText = document.getElementById('modal-erro-text');
-      modalText.textContent = error.message;
-      modal.style.display = "block";
+      setModalTexto(error.message);
+      setShowModalErro(true);
     }
   }
 
   const fecharModal = (id) => {
-    document.getElementById(id).style.display = "none";
+    if (id === 'modal-sucesso') {
+      setShowModalSucesso(false);
+    } else if (id === 'modal-erro') {
+      setShowModalErro(false);
+    }
   };
 
   return (
     <div className="pagina-criar-tarefa">
       {/* Modal de sucesso */}
-      <div id="modal-sucesso" className="modal">
-        <div className="modal-content">
-          <span className="close-button" onClick={() => fecharModal('modal-sucesso')}>&times;</span>
-          <p id="modal-sucesso-text"></p>
+      {showModalSucesso && (
+        <div id="modal-sucesso" className="modal show-modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={() => fecharModal('modal-sucesso')}>&times;</span>
+            <p id="modal-sucesso-text">{modalTexto}</p>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Modal de erro */}
-      <div id="modal-erro" className="modal">
-        <div className="modal-content">
-          <span className="close-button" onClick={() => fecharModal('modal-erro')}>&times;</span>
-          <p id="modal-erro-text"></p>
+      {showModalErro && (
+        <div id="modal-erro" className="modal show-modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={() => fecharModal('modal-erro')}>&times;</span>
+            <p id="modal-erro-text">{modalTexto}</p>
+          </div>
         </div>
-      </div>
+      )}
       
       <div className="cartao-criar-tarefa">
         <button onClick={() => navigate(-1)} className="botao-voltar">

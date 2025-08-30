@@ -43,6 +43,8 @@ export default function EditarRotina() {
 
         const tarefasData = await tarefasResp.json();
 
+        tarefasData.sort((a, b) => a.nome.localeCompare(b.nome)); 
+
         setNomeDaRotina(rotinaData.nome);
         setTarefasDisponiveis(tarefasData);
       

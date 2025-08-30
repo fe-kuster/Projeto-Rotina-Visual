@@ -164,7 +164,7 @@ export default function VisualizarRotina() {
             </div>
           ))
         ) : (
-          <p className="p-4 text-gray-500">Nenhuma tarefa encontrada para esta rotina. Edite sua rotina para adicionar tarefas.</p>
+          <p className="mensagem-vazia">Nenhuma tarefa encontrada para esta rotina. Edite sua rotina para adicionar tarefas.</p>
         )}
       </div>
       
