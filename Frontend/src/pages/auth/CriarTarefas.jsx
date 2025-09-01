@@ -45,6 +45,13 @@ export default function CriarTarefa() {
     { id: 'img27', url: 'https://i.imgur.com/B27hp5Q.jpeg', alt_text: 'Criança feliz de mochilinha, ao fundo a vovó chegou para buscar você para visitá-la.'},
     { id: 'img28', url: 'https://i.imgur.com/PYBqJDv.jpeg', alt_text: 'Criança feliz, ao fundo papai chegou para buscar você.'},
     { id: 'img29', url: 'https://i.imgur.com/fh0pRcO.jpeg', alt_text: 'Criança feliz no atendimento especializado da sua escola aprender com a sua profe.'},
+    { id: 'img30', url: 'https://i.imgur.com/fnFx3WX.jpeg', alt_text: 'É hora de guardar o celular, imagem de um celular feliz dando tchauzinho.'},
+    { id: 'img31', url: 'https://i.imgur.com/mVTw0d0.jpeg', alt_text: 'É hora de estudar inglês, imagem com um caderno, lápis, borracha e um pequeno livro de inglês com alguns desenhos e palavras em inglês.'},
+    { id: 'img32', url: 'https://i.imgur.com/v7BG6Gy.jpeg', alt_text: 'É hora da leitura, imagem com livros de animais, história e esportes, vamos ler.'},
+    { id: 'img33', url: 'https://i.imgur.com/ZYNrd32.jpeg', alt_text: 'Menino feliz segurando um pente e penteando o cabelo sozinho. '},
+    { id: 'img34', url: 'https://i.imgur.com/mxgHHlN.jpeg', alt_text: 'Menino feliz no consultório fazendo uma atividade durante a terapia.'},
+    { id: 'img35', url: 'https://i.imgur.com/r9BUHvZ.jpeg', alt_text: 'Menina feliz no consultório fazendo uma atividade durante a terapia.'},
+    { id: 'img36', url: 'https://i.imgur.com/b7htWlK.jpeg', alt_text: 'Menina feliz segurando uma escova e penteando o cabelo sozinha.'},
   ];
 
   const handleImagemSelect = (imagemSelecionada) => {
@@ -52,7 +59,6 @@ export default function CriarTarefa() {
     setAltText(imagemSelecionada.alt_text);
   };
   
-
   useEffect(() => {
     if(imagemUrl) {
       console.log('O estado de imagemUrl foi atualizado para:', imagemUrl);
