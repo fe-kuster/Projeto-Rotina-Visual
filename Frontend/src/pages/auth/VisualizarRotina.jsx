@@ -120,9 +120,9 @@ export default function VisualizarRotina() {
 
   return (
     <div className="pagina-container">
-      <Link to="/rotina" className="botao-voltar">
+      <button onClick={() => navigate(-1)} className="botao-voltar">
         Voltar
-      </Link>
+      </button>
       <h1 className="titulo-rotina">{nomeDaRotina}</h1>
       <div className="lista-tarefas-horizontal">
         {tarefas.length > 0 ? (

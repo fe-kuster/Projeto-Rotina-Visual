@@ -160,9 +160,9 @@ export default function EditarRotina() {
   return (
     <div className="pagina-editar-rotina">
       <div className="cartao-editar-rotina">
-        <Link to={`/rotina/${id}`} className="botao-voltar">
-             Voltar
-        </Link>
+        <button onClick={() => navigate(-1)} className="botao-voltar">
+          Voltar
+        </button>
         <h1 className="titulo-editar-rotina">Editar rotina</h1>
 
         {/* Nome da rotina */}

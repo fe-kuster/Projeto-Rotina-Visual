@@ -150,9 +150,9 @@ export default function MontarRotina() {
   return (
     <div className="pagina-montar-rotina">
       <div className="cartao-montar-rotina">
-        <Link to="/rotina" className="botao-voltar">
-            Voltar
-        </Link>
+        <button onClick={() => navigate(-1)} className="botao-voltar">
+          Voltar
+        </button>
         <h1 className="titulo-montar-rotina">Criar nova rotina</h1>
 
         {/* Nome da rotina */}
