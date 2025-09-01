@@ -26,6 +26,7 @@ export default function MontarRotina() {
           },
         });
         const data = await response.json();
+        data.sort((a, b) => a.nome.localeCompare(b.nome));
         setTarefasDisponiveis(data);
       } catch (err) {
         console.error("Erro ao buscar tarefas:", err);
